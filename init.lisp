@@ -1,0 +1,15 @@
+
+(load "/p/nl/tools/ttt/src/load")
+;(load "~/research/ttt/src/load")
+
+;; Lexical pattern functions for TTT
+;; e.g. noun? : *.n
+;;      adj?  : *.a
+;;      v?    : *.v
+(load "ttt-lexical-patterns")
+(load "ttt-phrase-patterns")
+(load "ttt-bad-patterns")
+
+(load "ulf_sanity_checker")
+
+

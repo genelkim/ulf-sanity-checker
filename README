@@ -1,0 +1,38 @@
+This needs to be run in cs.rochester.edu
+
+**Before starting the description, please remember this was quickly written up and minimally tested so there could be errors.  *Always* think about whether there is in fact an error before making changes.**
+
+Paste 1 formula into a file then run:
+./sanity_check.sh [filename]
+
+Sanity check performs the following steps:
+Preprocessing:
+  1. Remove curly brackets that are not escaped
+  2. preprocess quotes so they can be read into Lisp
+  3. Filter commas, semicolons, integrated quotes
+  4. Extract sentence-leve operators : not, (adv-e ..), *.adv-e
+  Return ([filtered sentence], [list of sentence-level ops])
+
+Sanity check (for filtered sentence and each sentence-level op):
+  1. Recursively guess type for formula constituents.
+  2. Look for obvious errors (e.g. wrong number of arguments, tense mismatch, etc.)
+
+It will print the formula after preprocessing and the formula with the predicted types prefixed to each constituent recursively (this type marking is a bit hard to read).
+Then it will display segments of the annotation that it predicts have errors (they look like this):
+
+Ann segment: ((PRES BE.V) (SOMEWHAT.ADV-A ((PAST EXPLAIN.V) (ADV-A (AT.P (THE.D END.N))))))
+Predicted constituent types ((list of types) -- constituent)
+  ((PRED TENSED-VERB) -- (PRES BE.V))
+  ((PRED TENSED-VERB) -- (SOMEWHAT.ADV-A ((PAST EXPLAIN.V) (ADV-A (AT.P (THE.D END.N))))))
+Possibly failed conditions:
+  "Each embedded sentence should only have 1 tense operator."
+
+First it prints the segment.  Then it lists the constituents with their predicted types. 
+Then is gives a general description of the expected conditions given the types.
+
+Few thinks to look for:
+- Errors may appear because you incorrectly annotated a sentence-level operator, which gets lifted out.
+- Since UNKNOWN types are propagated, it's best to first look for where an UNKNOWN type is introduced and check if there's a mistake in the formula or if the sanity checker is wrong.
+
+
+

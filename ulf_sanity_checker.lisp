@@ -31,7 +31,7 @@
 ; - every sentence has a tensed verb
 ; - (*.p ..) is a predicate
 ;   -> if (p1.v/a (*.p ..)), then ask if this is an adverb.
-;   Exception: (*-arg.p ..) is an argument.
+;   Exception: (*.p-arg ..) is an argument.
 ; - each embedded sentence only has one tense op
 ; - Check plurals with plural form dictionary
 ; - Record syntax ($) all have at least 1 non-null arg, last arg is not null
@@ -52,10 +52,6 @@
 ; - Check correct punctuation are escaped
 ; - number of quotes match between surface sentence and ulf
 ; - try to align words between ULF and sentence (ask if omitted/extra ones are necessary).
-
-(defparameter *filtered* (list '|,| '|;| '|"| '|'|
-                               (list 'quotestart-i '|"|) 
-                               (list 'quotestart-i '|'|)))
 
 ;; Returns a list of lst with cndn filter out followed by lst with only cndn.
 (defun split-by-cond (lst cndn)
@@ -82,41 +78,7 @@
 (defun preprocess (f)
   (labels
     (
-     ; Merge object quotes.
-     (merge-quoteo
-       (fs)
-       (if (atom fs) fs
-       (let 
-         ((mfs (mapcar #'merge-quoteo fs)))
-         (cond 
-           ((and (equal (list 'quotestart-o '|"|)
-                        (first mfs))
-                 (equal '|"| (last mfs)))
-            (cons (list 'quoteo '|"|) 
-                    (cdr (reverse (cdr (reverse mfs))))))
-           ((and (equal (list 'quotestart-o '|'|)
-                        (first mfs))
-                 (equal '|'| (last mfs)))
-            (cons (list 'quoteo '|'|) 
-                  (cdr (reverse (cdr (reverse mfs))))))
-           ((or
-                 (and
-                   (equal (list 'quotestart-o '|'|)
-                          (first mfs))
-                   (equal '|"| (last mfs)))
-                (and 
-                  (equal (list 'quotestart-o '|"|)
-                         (first mfs))
-                  (equal '|'| (last mfs))))
-               (format t "Object quote with mismatched quote types."))
-          (t mfs)))))
           
-     ; Filter symbols that are removed regardless of context.
-     (dumb-filter 
-       (fs)
-       (if (atom fs) fs
-         (remove-if (lambda (x) (member x *filtered*)) 
-                      (mapcar #'dumb-filter fs))))
      ; Extract sentence-level operators.
      ; Returns (sent-op-filtered-f, list-of-sent-ops)
      (extract-sent-ops
@@ -135,9 +97,7 @@
          ((= (length f) 1) (remove-extra-parens (car f)))
          (t (mapcar #'remove-extra-parens f))))
      ); end of labels definitions.
-    (let ((pair (extract-sent-ops
-                  (dumb-filter
-                    (merge-quoteo f)))))
+    (let ((pair (extract-sent-ops f)))
       (list (remove-extra-parens (first pair)) (second pair)))))
         
 

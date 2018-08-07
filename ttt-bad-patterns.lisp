@@ -79,7 +79,8 @@
       (np+preds term? _*.1 (! ~ pred?) _*.2))) ; argument that is not the first is not a predicate.
       
 (defparameter *bad-np-preds-msg* 
-  "np+preds takes at least 2 arguments where the first is aterm and the rest are predicates.")
+  "np+preds takes at least 2 arguments where the first is a term and the rest are predicates.")
+
 
 (defparameter *ttt-bad-n-preds*
   '(!1 (_+ n+preds _*) ; n+preds not used as prefix operator.

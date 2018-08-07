@@ -5,7 +5,7 @@
   '(date-time currency us_addr))
 
 (defparameter *ttt-noun*
-   '(! lex-noun?
+  '(! lex-noun?
       lex-name-pred?
       (adj? noun?)
       (plur noun?)
@@ -45,11 +45,13 @@
       (det? noun?)
       (k noun?)
       (to verb?)
+      (gd verb?)
       (ka verb?)
       (ke sent?)
-      ;; Record syntax.
-      ($ record-type? (+ (! - term?)))
-      (lex-arg-p? term?)
+      ;; Domain specific syntax.
+      (ds _! litstring?)
+      
+      (lex-p-arg? term?)
       ;; Rather than building a whole set of types corresponding to versions 
       ;; with the hole contained, I'll just check it dynamically.
       [*]h))
@@ -87,12 +89,12 @@
       (lex-detformer? adj?)))
 
 (defparameter *ttt-sent*
-  '(! (term? verb?)
-      (sent? lex-coord? (+ sent?))
-      (sent-mod? sent?)
-      (sent? sent-mod?)
-      (adv-a? term? verb?)
-      (sent? sent-punct?)))
+  '(! (term? verb?)        ; subject verb
+      (sent? lex-coord? (+ sent?)) ; multiple sentences
+      (sent-mod? sent?)    ; sentence modifier, sentence
+      (sent? sent-mod?)    ; sentence, sentence modifier
+      (adv-a? term? verb?) ; action adverb, subject, verb
+      (sent? sent-punct?))); sentence with punctuation 
 
 (defparameter *ttt-tensed-sent*
   '(! (term? tensed-verb?)
@@ -126,7 +128,7 @@
 
 (defun record-type? (x) (member x *record-types*))
 (defun sent-punct? (x)
-  (member x '(! ? \.)))
+  (member x '(! ?)))
 (defun tensed-sent-op? (x)
   (or 
     (member x '(that tht))

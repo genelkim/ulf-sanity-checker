@@ -103,6 +103,12 @@
 (defparameter *bad-double-tense-msg*
   "Each embedded sentence should only have 1 tense operator.")
 
+
+(defparameter *ttt-no-periods-or-commas*
+  '(! \, \.))
+(defparameter *no-periods-or-commas-msg*
+  "Annotating commas and periods is no longer supported.")
+
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt:match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt:match-expr *ttt-bad-prep* x))
@@ -118,6 +124,7 @@
 (defun bad-n-preds? (x) (ttt:match-expr *ttt-bad-n-preds* x))
 (defun bad-sent-punct? (x) (ttt:match-expr *ttt-bad-sent-punct* x))
 (defun bad-double-tense? (x) (ttt:match-expr *ttt-bad-double-tense* x))
+(defun no-periods-or-commas? (x) (ttt:match-expr *ttt-no-periods-or-commas* x))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -134,6 +141,6 @@
     (list #'bad-np-preds? *bad-np-preds-msg*)
     (list #'bad-n-preds? *bad-n-preds-msg*)
     (list #'bad-sent-punct? *bad-sent-punct-msg*)
-    (list #'bad-double-tense? *bad-double-tense-msg*)))
-
+    (list #'bad-double-tense? *bad-double-tense-msg*)
+    (list #'no-periods-or-commas? *no-periods-or-commas-msg*)))
 

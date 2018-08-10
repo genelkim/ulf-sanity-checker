@@ -11,8 +11,11 @@
 (load "init")
 
 (let* ((use-stdin nil)
-       (formulahandle (if use-stdin *standard-output*
-                     (open (nth 1 (sys:command-line-arguments)))))
-       (formula (read formulahandle)))
-  (format t "~s~%" (sanity-check formula)))
+       (fh (if use-stdin *standard-output*
+                     (open (nth 1 (sys:command-line-arguments))))))
+  
+  (when fh
+    (loop for ulf = (read fh nil)
+          while ulf do (format t "~s~%~%####################################~%~%" (sanity-check ulf)))
+    (close fh)))
 

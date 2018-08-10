@@ -10,18 +10,30 @@
       (adj? noun?)
       (plur noun?)
       (noun? noun?)
+      (lex-name? noun?)
       ; (mother-of.n |John|)
       (lex-noun? term?)
-      (lex-function? term?)))
+      (lex-function? term?)
+      (n+preds noun? (+ pred?))))
 
 (defparameter *ttt-adj*
   '(! lex-adjective?
       (adj? adj?)
-      (adv-a? adj?)))
+      (adv-a? adj?)
+      (poss-by term?)
+      ;; Some adjectives take infinitives.
+      (adj? (to verb?))
+      ;; Some adjectives take arguments.
+      (adj? (lex-p-arg? term?))
+      ))
 
 (defparameter *ttt-adv-a*
    '(! lex-adv-a?
-      (adv-a pred?)))
+      (adv-a pred?)
+      ;; Below is not quite correct since some *.pq map to (adv-e ...), but for
+      ;; the sake of this syntax checker it doesn't matter.
+      lex-pq? 
+      ))
 
 (defparameter *ttt-adv-e*
    '(! lex-adv-e?
@@ -43,30 +55,39 @@
       lex-name?
       lex-number?
       (det? noun?)
-      (k noun?)
-      (to verb?)
-      (gd verb?)
-      (ka verb?)
-      (ke sent?)
+      (set-of (+ term?))
+      ;; Reified
+      (noun-reifier? noun?)
+      (verb-reifier? verb?)
+      (sent-reifier? sent?)
+      (tensed-sent-reifier? tensed-sent?)
       ;; Domain specific syntax.
       (ds _! litstring?)
-      
+      ;; Prepositional argument.s
       (lex-p-arg? term?)
+      ;; Possessive macro.
+      ((term? 's) noun?)
+      ;; np+preds.
+      (np+preds term? (+ pred?))
+      ;; Object quoted expression.
+      (|"| _+ |"|) ; same as (\" .. \"), but breaks the syntax highlighting less.
       ;; Rather than building a whole set of types corresponding to versions 
       ;; with the hole contained, I'll just check it dynamically.
-      [*]h))
+      [*]h
+      [*]s))
 
 (defparameter *ttt-verb*
    '(! lex-verb?
-      (verb? (? (! term? pred?)) (! term? pred?))
-      (adv-a? verb?)
-      (verb? (+ adv-a?))
-      (aux? verb?)
-      (verb? adv-a? term?)))
+       (pasv lex-verb?)
+       (verb? (+ (! term? pred?)))
+       (adv-a? verb?)
+       (verb? (+ adv-a?))
+       (aux? verb?)
+       (verb? adv-a? term?)
+       (lex-coord? (+ verb?))))
 
 (defparameter *ttt-pred*
    '(! verb? noun? adj? tensed-verb? pp?
-       (lex-ps? tensed-sent?)
        (lex-rel? pred?)
        (sub lex-rel? sent?)))
 
@@ -97,12 +118,35 @@
       (sent? sent-punct?))); sentence with punctuation 
 
 (defparameter *ttt-tensed-sent*
-  '(! (term? tensed-verb?)
+  '(! ;; Simple sentence.
+      (term? tensed-verb?)
+      ;; Coordinated sentence.
       (tensed-sent? lex-coord? (+ tensed-sent?))
+      ;; Modified sentence (e.g. curried coordination). 
       (sent-mod? tensed-sent?)
+      ;; Postfixed sentence modification.
       (tensed-sent? sent-mod?)
+      ;; Backwards sentence... 
       (tensed-verb? adv-a? term?)
-      (tensed-sent? sent-punct?)))
+      ;; Punctuated sentence.
+      (tensed-sent? sent-punct?)
+      ;; Prepositionally coordinated sentences.
+      ((lex-ps? tensed-sent?) tensed-sent?)
+      (tensed-sent? (lex-ps? tensed-sent?))
+      ;; Inverted sentence.
+      ((lex-tense? (!2 lex-verb? aux?)) term? verb?)
+      ;; Phrasal utterances.
+      (pu _!1)
+      ;; Multiple sentences stuck together (e.g. some multi-sentence annotations).
+      (tensed-sent? (+ tensed-sent?))
+      ;; Expletives are treated as tensed sentences.
+      lex-x?
+      ;; Yes/no expressions are treated as tensed sentences.
+      lex-yn?
+      ;; Greetings.
+      lex-gr?
+      (gr _!)
+      ))
 
 (defparameter *ttt-sent-mod*
   '(!1 
@@ -128,16 +172,19 @@
 
 (defun record-type? (x) (member x *record-types*))
 (defun sent-punct? (x)
-  (member x '(! ?)))
-(defun tensed-sent-op? (x)
-  (or 
-    (member x '(that tht))
-    (lex-ps? x)))
-(defun sent-op? (x)
-  (or 
-    (member x '(ke))))
-(defun action-reifier? (x)
-  (member x '(ka to)))
+  (member x '(! ? .?)))
+
+;; Reifiers.
+(defun noun-reifier? (x)
+  (member x '(k)))
+(defun tensed-sent-reifier? (x)
+  (member x '(that tht whether ans-to)))
+(defun sent-reifier? (x)
+  (member x '(ke)))
+(defun verb-reifier? (x)
+  (member x '(ka to gd)))
+
+;; Operator forming type-shifters.
 (defun advformer? (x)
   (member x '(adv-a adv-e adv-s adv-f)))
 (defun detformer? (x)
@@ -162,13 +209,15 @@
         (list #'tensed-sent? 'tensed-sent)
         (list #'lex-tense? 'tense)
         (list #'sent-punct? 'sent-punct)
-        (list #'sent-op? 'sent-op)
         (list #'sent-mod? 'sent-mod)
-        (list #'tensed-sent-op? 'sent-op)
-        (list #'action-reifier? 'action-reifier)
+        (list #'noun-reifier? 'noun-reifier)
+        (list #'verb-reifier? 'verb-reifier)
+        (list #'sent-reifier? 'sent-reifier)
+        (list #'tensed-sent-reifier? 'tensed-sent-reifier)
         (list #'advformer? 'advformer)
         (list #'detformer? 'detformer)))
 
+;; Hypothesizes the type of the given ULF formula.
 (defun ulf-type? (x)
   (let ((matched (remove-if-not #'(lambda (pair) (apply (first pair) (list x)))
                                 *type-id-fns*)))
@@ -176,6 +225,9 @@
       (mapcar #'second matched)
       '(unknown))))
 
+;; Labels formula with the hypothesized types.
+;; TODO: Merging this function with 'ulf-type?' to get all types in one bottom
+;;       up fashion would speed this up a lot.
 (defun label-formula-types (f)
   (cond 
     ((atom f) f)

@@ -97,6 +97,18 @@
     (lex-adv-e? x)
     (lex-adv-f? x)))
 
+;; Expletives.
+(defun lex-x? (x)
+  (suffix-check x "X"))
+
+;; Yes/no evaluations.
+(defun lex-yn? (x)
+  (suffix-check x "YN"))
+
+;; Greetings.
+(defun lex-gr? (x)
+  (suffix-check x "GR"))
+
 (defun lex-tense? (x)
   (member x *tense*))
 

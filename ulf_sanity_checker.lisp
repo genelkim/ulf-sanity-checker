@@ -19,28 +19,27 @@
 ; - adv-* only take 1 predicate arg
 ; - fquan/nquan take adjective predicates 
 ; - np+preds takes a term + at least 1 pred
-; - n+preds takes a nou + at least 1 pred
+; - n+preds takes a noun + at least 1 pred
 ; - Check sentence-level punctuation is at its own unary scope.
 ; - poss-by takes a single term arg ('s also but post-fixed)
+; - there are no periods or commas (they're depricated)
+; - *.ps annotation doesn't have and adv forming wrapper
+; - possessives are ((<term> 's) <noun>)
+; - pu takes a single argument
+; - predicate modifications should be done in operator-operand pairs (non-flat)
+; - brackets should not scope around a single member
 ;
 ; Syntax building reminders
 ; - Object quotes are acting as terms
 ; - relative clauses are tensed
 ;
-; Dynamic checks
+; Dynamic checks (TODO)
 ; - every sentence has a tensed verb
 ; - (*.p ..) is a predicate
 ;   -> if (p1.v/a (*.p ..)), then ask if this is an adverb.
 ;   Exception: (*.p-arg ..) is an argument.
 ; - each embedded sentence only has one tense op
 ; - Check plurals with plural form dictionary
-; - Record syntax ($) all have at least 1 non-null arg, last arg is not null
-;   date-time <= 6 args
-;       12 >= month >= 1
-;       31 >= day >= 1
-;       23 >= hour >= 0
-;       59 >= minute >= 0
-;       59 >= second >= 0
 ;   currency <= 2 args
 ;       currency name : symbol 
 ;       amount : number
@@ -48,10 +47,9 @@
 ;       all terms (numbers, names, or (k *.n))
 ; - check tense (get past-participle list and check)
 ; 
-; Preprocessing checks
-; - Check correct punctuation are escaped
-; - number of quotes match between surface sentence and ulf
+; Preprocessing checks (TODO)
 ; - try to align words between ULF and sentence (ask if omitted/extra ones are necessary).
+; - run sub/rep since they are type-general (too much work to add into the type system).
 
 ;; Returns a list of lst with cndn filter out followed by lst with only cndn.
 (defun split-by-cond (lst cndn)
@@ -69,8 +67,6 @@
     (member e '(not not.adv-e not.adv-s))))
 
 
-;; Merge object quotes.
-;; Filter commas, semicolons, integrated quote marks.
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
 ;; Replace aliases?
@@ -141,30 +137,40 @@
 
 (defun sanity-check (f)
   (let* ((preprocd (preprocess f))
+         (linesep (format nil "************************************~%"))
          (patternres 
            (apply #'append
                       (mapcar #'bad-pattern-check (cons (first preprocd)
                                                         (second preprocd))))))
+    (format t linesep)
     (format t "Sanity checking formula (after preprocessing).~%")
-    (format t "~s~%" preprocd)
-    (format t "Formula with predicted types.~%")
-    (format t "~s~%~%" (mapcar #'label-formula-types preprocd))
+    (format t linesep)
+    (format t "~s~%~%" preprocd)
     
+    (format t linesep)
+    (format t "Possible errors~%")
+    (format t linesep)
     (if patternres
       ;; Found some patterns.
       (dolist (x patternres)
         (let ((segment (first x))
               (msgs (second x)))
-          (format t "Ann segment: ~s~%" segment)
-          (format t "Predicted constituent types ((list of types) -- constituent)~%") 
-          (dolist (arg segment) 
-            (format t "  ~s~%" (list (ulf-type? arg) '-- arg)))
           (format t "Possibly failed conditions:~%")
           (dolist (msg msgs)
             (format t "  ~s~%" msg))
-          (format t "~%")))
+          (format t "Ann segment:~%  ~s~%" segment)
+          (format t "Predicted constituent types ((list of types) -- constituent)~%") 
+          (dolist (arg segment) 
+            (format t "  ~s~%" (list (ulf-type? arg) '-- arg)))))
       ;; No patterns.
-      (format t "****No errors detected.****~%"))))
+      (format t "****No errors detected.****~%"))
+    
+    (format t "~%")
+    (format t linesep) 
+    (format t "Formula with predicted types (for debugging).~%")
+    (format t linesep)
+    (format t "~s~%~%" (mapcar #'label-formula-types preprocd))
+    ))
 
 
 

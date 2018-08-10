@@ -20,27 +20,26 @@
       ((lex-tense? be.v) _! _+)
       ((lex-tense? be.v) (! ~ pred?))))
 (defparameter *bad-be-msg* 
-  "be.v takes a single predicate argument.")
+  "be.v takes a single predicate argument (unless used after an it-cleft -- ignore this if that's the case).")
 
 (defparameter *ttt-bad-tensed-sent-op*
-  '(!1 (tensed-sent-op? _! _+)
-      (tensed-sent-op? (! ~ tensed-sent?))))
+  '(!1 ((!2 tensed-sent-reifier? lex-ps?) _! _+)
+      ((!3 tensed-sent-reifier? lex-ps?) (! ~ tensed-sent?))))
 (defparameter *bad-tensed-sent-op-msg* 
   "that/tht/*.ps take a single tensed sentence argument.")
 
-(defparameter *ttt-bad-untensed-sent-op*
-  '(!1 (untensed-sent-op? _! _+)
-      (untensed-sent-op? (! ~ sent?))
-      (_+ untensed-sent-op? _*)))
-(defparameter *bad-untensed-sent-op-msg* 
+(defparameter *ttt-bad-sent-op*
+  '(!1 (sent-reifier? _! _+)
+      (sent-reifier? (! ~ sent?))
+      (_+ sent-reifier? _*)))
+(defparameter *bad-sent-op-msg* 
   "ke takes a single untensed sentence argument.")
 
-
-(defparameter *ttt-bad-action-reifier*
-  '(!1 (action-reifier? _! _+)
-      (action-reifier? (! ~ verb?))
-      (_+ action-reifier? _*)))
-(defparameter *bad-action-reifier-msg* 
+(defparameter *ttt-bad-verb-reifier*
+  '(!1 (verb-reifier? _! _+)
+      (verb-reifier? (! ~ verb?))
+      (_+ verb-reifier? _*)))
+(defparameter *bad-verb-reifier-msg* 
   "ka/to take a single untensed verb argument.")
 
 (defparameter *ttt-bad-plur*
@@ -85,7 +84,7 @@
 (defparameter *ttt-bad-n-preds*
   '(!1 (_+ n+preds _*) ; n+preds not used as prefix operator.
       (n+preds _!) ; Only 1 arg.
-      (n+preds (! ~ noun?) _+) ; first argument is not a term.
+      (n+preds (! ~ noun?) _+) ; first argument is not a noun.
       (n+preds noun? _*1 (! ~ pred?) _*2) ; argument that is not the first is not a predicate.
       ))
 (defparameter *bad-n-preds-msg* 
@@ -103,19 +102,52 @@
 (defparameter *bad-double-tense-msg*
   "Each embedded sentence should only have 1 tense operator.")
 
-
 (defparameter *ttt-no-periods-or-commas*
   '(! \, \.))
 (defparameter *no-periods-or-commas-msg*
   "Annotating commas and periods is no longer supported.")
+
+(defparameter *ttt-old-ps-ann*
+  '((! adv-e adv-a adv-s) 
+    (lex-ps? tensed-sent?)))
+(defparameter *old-ps-ann-msg* 
+  "(adv-s (*.ps ...)) is no longer the way to annotate *.ps.")
+
+(defparameter *ttt-bad-possessive*
+  '(!1 (((!2 ~ term?) 's) noun?) ; first arg is not a term
+       ((term? 's) (!2 ~ noun?)) ; second arg is not a noun
+       ('s _+)      ; 's used as a prefix operator
+       (_+1 's _+2) ; 's used flat
+        ))
+(defparameter *bad-possessive-msg*
+  "The 's operator takes a term (post-fixed), followed by a noun (prefixed), and curried.")
+
+(defparameter *ttt-bad-pu*
+  '(pu _! _+))
+(defparameter *bad-pu-msg*
+  "The 'pu' operator takes a single phrase.")
+
+(defparameter *ttt-bad-flat-mod*
+  '(_*1 
+     (!2 adj? noun? term?) 
+     (!3 adj? noun? term?)
+     (!4 adj? noun? term?)
+     _*2))
+(defparameter *bad-flat-mod-msg*
+  "Predicate modifications should be scoped into operator-operand pairs.")
+
+(defparameter *ttt-bad-single-bracket*
+  '((_!)))
+(defparameter *bad-single-bracket-msg*
+  "Brackets should not scope around a single constituent (need at least two members in its scope as an operator-operand pair).")
 
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt:match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt:match-expr *ttt-bad-prep* x))
 (defun bad-be? (x) (ttt:match-expr *ttt-bad-be* x))
 (defun bad-tensed-sent-op? (x) (ttt:match-expr *ttt-bad-tensed-sent-op* x))
-(defun bad-untensed-sent-op? (x) (ttt:match-expr *ttt-bad-untensed-sent-op* x))
-(defun bad-action-reifier? (x) (ttt:match-expr *ttt-bad-action-reifier* x))
+(defun bad-sent-op? (x) (ttt:match-expr *ttt-bad-sent-op* x))
+(defun bad-verb-reifier? (x) (ttt:match-expr *ttt-bad-verb-reifier* x))
 (defun bad-plur? (x) (ttt:match-expr *ttt-bad-plur* x))
 (defun bad-aux? (x) (ttt:match-expr *ttt-bad-aux* x))
 (defun bad-advformer? (x) (ttt:match-expr *ttt-bad-advformer* x))
@@ -125,6 +157,11 @@
 (defun bad-sent-punct? (x) (ttt:match-expr *ttt-bad-sent-punct* x))
 (defun bad-double-tense? (x) (ttt:match-expr *ttt-bad-double-tense* x))
 (defun no-periods-or-commas? (x) (ttt:match-expr *ttt-no-periods-or-commas* x))
+(defun old-ps-ann? (x) (ttt:match-expr *ttt-old-ps-ann* x))
+(defun bad-possessive? (x) (ttt:match-expr *ttt-bad-possessive* x))
+(defun bad-pu? (x) (ttt:match-expr *ttt-bad-pu* x))
+(defun bad-flat-mod? (x) (ttt:match-expr *ttt-bad-flat-mod* x))
+(defun bad-single-bracket? (x) (ttt:match-expr *ttt-bad-single-bracket* x))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -132,8 +169,8 @@
     (list #'bad-prep? *bad-prep-msg*)
     (list #'bad-be? *bad-be-msg*)
     (list #'bad-tensed-sent-op? *bad-tensed-sent-op-msg*)
-    (list #'bad-untensed-sent-op? *bad-untensed-sent-op-msg*)
-    (list #'bad-action-reifier? *bad-action-reifier-msg*)
+    (list #'bad-sent-op? *bad-sent-op-msg*)
+    (list #'bad-verb-reifier? *bad-verb-reifier-msg*)
     (list #'bad-plur? *bad-plur-msg*)
     (list #'bad-aux? *bad-aux-msg*)
     (list #'bad-advformer? *bad-advformer-msg*)
@@ -142,5 +179,11 @@
     (list #'bad-n-preds? *bad-n-preds-msg*)
     (list #'bad-sent-punct? *bad-sent-punct-msg*)
     (list #'bad-double-tense? *bad-double-tense-msg*)
-    (list #'no-periods-or-commas? *no-periods-or-commas-msg*)))
+    (list #'no-periods-or-commas? *no-periods-or-commas-msg*)
+    (list #'old-ps-ann? *old-ps-ann-msg*)
+    (list #'bad-possessive? *bad-possessive-msg*)
+    (list #'bad-pu? *bad-pu-msg*)
+    (list #'bad-flat-mod? *bad-flat-mod-msg*)
+    (list #'bad-single-bracket? *bad-single-bracket-msg*)
+    ))
 

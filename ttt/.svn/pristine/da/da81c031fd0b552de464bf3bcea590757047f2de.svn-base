@@ -1,2 +1,0 @@
-(load (compile-file "/u/apurtee/projects/ttt-dev/ttt/src-pkg/tttpkg"))
-(load "/u/apurtee/projects/ttt-dev/ttt/src-pkg/all.dev")

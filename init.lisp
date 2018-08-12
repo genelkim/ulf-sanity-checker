@@ -11,6 +11,8 @@
 (load "ttt-phrase-patterns")
 (load "ttt-bad-patterns")
 
+(load "macros")
+
 (load "ulf_sanity_checker")
 
 

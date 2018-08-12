@@ -69,6 +69,8 @@
 
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
+;; Apply sub macros
+;; Uninvert verb/auxiliary inversions for questions.
 ;; Replace aliases?
 ;; Returns (preprocessed-f, sent-ops)
 (defun preprocess (f)
@@ -93,8 +95,15 @@
          ((= (length f) 1) (remove-extra-parens (car f)))
          (t (mapcar #'remove-extra-parens f))))
      ); end of labels definitions.
-    (let ((pair (extract-sent-ops f)))
-      (list (remove-extra-parens (first pair)) (second pair)))))
+    (let* ((pair (extract-sent-ops f))
+           (paren-remvd (list (remove-extra-parens (first pair)) 
+                              (second pair)))
+           (subres (multiple-value-list
+                     (apply-sub-macro paren-remvd)))
+           (subf (second subres))
+           (uninv (ttt:apply-rule *ttt-uninvert-verbaux*
+                                  subf)))
+      uninv)))
         
 
 

@@ -59,3 +59,28 @@
            (let ((failpos (position nil successes)))
              (values nil (nth failpos fs))))))))
 
+
+(defun lex-verbaux? (x)
+  (or (lex-verb? x) (aux? x))) 
+
+;;; Rule to uninvert sentences with verb/auxiliary inversion, e.g. questions.
+(defparameter *ttt-uninvert-verbaux*
+  '(/ ((lex-tense? lex-verbaux?) term? _+)
+      (uninvert-verbaux! ((tense? lex-verbaux?) term? _+))))
+
+;;; Takes a sentence of the form 
+;;; ((<tense> verb/aux) NP VP ADV1 .. ADVn)
+;;; and transforms it to
+;;; (NP ((((<tense> verb/aux) VP) ADV1) ... ADVn))
+(defun uninvert-verbaux! (ulf)
+  (if (< (length ulf) 3)
+    (return-from 'uninvert-verbaux! nil))
+  (let ((headva (first ulf))
+        (np (second ulf))
+        (vp (third ulf))
+        (remain (cdddr ulf)))
+    (list np
+          (reduce #'list remain :initial-value (list headva vp)))))
+
+
+

@@ -73,7 +73,7 @@ def check_escape(s):
 # {(...)} -> (elided (...))
 # {ref1}.n-- handled in type system since it's lexical.
 def bracket_filter(s):
-  return re.sub(r'(?<!\\)([{|}])', r'', s)
+  return re.sub(r'(?<!\\)([{}])', r'', s)
 
 def preproc(s):
   bracket_filtered = bracket_filter(s)

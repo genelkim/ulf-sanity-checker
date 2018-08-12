@@ -155,7 +155,7 @@
       (dolist (x patternres)
         (let ((segment (first x))
               (msgs (second x)))
-          (format t "Possibly failed conditions:~%")
+          (format t "~%Possibly failed conditions:~%")
           (dolist (msg msgs)
             (format t "  ~s~%" msg))
           (format t "Ann segment:~%  ~s~%" segment)

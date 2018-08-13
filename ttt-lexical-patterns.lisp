@@ -74,7 +74,9 @@
 (defun lex-name? (x)
   (and
     (match-re "^\\|\[\^\\|\]\+\\|$" (format nil "~s" x))
-    (not (lex-name-pred? x))))
+    (not (lex-name-pred? x))
+    ;; Special handling of quotes '\" == '|"|.
+    (not (eq '\" x))))
 
 ; Adverbs
 (defun lex-adv-a? (x)

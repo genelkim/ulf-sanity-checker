@@ -29,11 +29,11 @@
     ((atom ulf) (values t ulf))
     ;; If sub and less than 2 arguments, fail.
     ((and (eq (first ulf) 'sub) (< (length ulf) 3))
-     (return-from 'apply-sub-macro (values nil ulf)))
+     (return-from apply-sub-macro (values nil ulf)))
     ;; If sub, recurse into the second arg, then try to apply.
     ((eq (first ulf) 'sub)
      (if (and fail-on-bad-use (not (equal (length ulf) 3)))
-       (return-from 'apply-sub-macro (values nil ulf)))
+       (return-from apply-sub-macro (values nil ulf)))
      (multiple-value-bind (recsuc recres) 
                           (apply-sub-macro (third ulf) fail-on-bad-use)
        (cond

@@ -137,7 +137,7 @@
   "Predicate modifications should be scoped into operator-operand pairs.")
 
 (defparameter *ttt-bad-single-bracket*
-  '((_!)))
+  '(_!))
 (defparameter *bad-single-bracket-msg*
   "Brackets should not scope around a single constituent (need at least two members in its scope as an operator-operand pair).")
 
@@ -184,6 +184,11 @@
     (list #'bad-possessive? *bad-possessive-msg*)
     (list #'bad-pu? *bad-pu-msg*)
     (list #'bad-flat-mod? *bad-flat-mod-msg*)
+    ))
+
+;; Same as above but run on raw formulas (before preprocessing).
+(defparameter *raw-bad-pattern-test-pairs*
+  (list
     (list #'bad-single-bracket? *bad-single-bracket-msg*)
     ))
 

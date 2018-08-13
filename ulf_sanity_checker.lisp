@@ -95,6 +95,8 @@
          ((= (length f) 1) (remove-extra-parens (car f)))
          (t (mapcar #'remove-extra-parens f))))
      ); end of labels definitions.
+    
+    ;; Main body, run the preprocessing functions.
     (let* ((pair (extract-sent-ops f))
            (paren-remvd (list (remove-extra-parens (first pair)) 
                               (second pair)))
@@ -107,24 +109,25 @@
         
 
 
-
-;; Recursively check for bad patterns.
-;; The types are guessed through TTT patterns.
+;; Recursively check for bad patterns on formula f.
+;; pattern-test-pairs is a list of pairs of functions and corresponding
+;;  messages.  The functinos are evaluated and if t, the message is returned.
 ;; Returns a list of pairs with user display information.
 ;; 1. pattern that failed a test.
 ;; 2. a list of messages about conditions for failed phenomena.
-(defun bad-pattern-check (f)
+(defun bad-pattern-check (f pattern-test-pairs &optional top)
   (labels 
-    ((single-bad-pattern-eval
-       (segment pair)
+    (
+     ;; Evaluates a formula fragment ons a simple test/msg pair.
+     (single-bad-pattern-eval (segment pair)
        (if (apply (first pair) (list segment))
          (list segment (list (second pair)))
          nil))
-     (bad-pattern-eval
-       (x)
+     ;; Evaluates segment 'x' on all 'pattern-test-pairs'.
+     (bad-pattern-eval (x)
        (let ((indres (mapcar #'(lambda (pair) 
                                  (single-bad-pattern-eval x pair)) 
-                             *bad-pattern-test-pairs*)))
+                             pattern-test-pairs)))
          (if (apply #'append indres)
            ;; Merge the messages into a list of messages.
            (list (caar (remove-if #'null indres)) 
@@ -133,7 +136,10 @@
            nil)))); end of labels definitions.
     (cond
       ((atom f) '())
-      (t (let ((recres (apply #'append (mapcar #'bad-pattern-check f)))
+      (t (let ((recres (apply #'append 
+                              (mapcar #'(lambda (x) 
+                                          (bad-pattern-check x pattern-test-pairs))
+                                      f)))
                (curres (bad-pattern-eval f)))
            (if curres
              (cons curres recres)
@@ -145,12 +151,22 @@
 
 
 (defun sanity-check (f)
-  (let* ((preprocd (preprocess f))
+  (let* ((rawpatternres
+           (list (bad-pattern-check f *raw-bad-pattern-test-pairs* t)))
+         (preprocd (preprocess f))
          (linesep (format nil "************************************~%"))
          (patternres 
            (apply #'append
-                      (mapcar #'bad-pattern-check (cons (first preprocd)
-                                                        (second preprocd))))))
+                  (mapcar #'(lambda (x)
+                              (bad-pattern-check x *bad-pattern-test-pairs*))
+                          preprocd)))
+          allres)
+
+    (format t linesep)
+    (format t "Sanity checking formula (before preprocessing).~%")
+    (format t linesep)
+    (format t "~s~%~%" f)
+    
     (format t linesep)
     (format t "Sanity checking formula (after preprocessing).~%")
     (format t linesep)
@@ -159,9 +175,11 @@
     (format t linesep)
     (format t "Possible errors~%")
     (format t linesep)
-    (if patternres
+    
+    (setq allres (append rawpatternres patternres))
+    (if allres
       ;; Found some patterns.
-      (dolist (x patternres)
+      (dolist (x allres)
         (let ((segment (first x))
               (msgs (second x)))
           (format t "~%Possibly failed conditions:~%")

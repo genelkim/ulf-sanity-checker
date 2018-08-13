@@ -14,7 +14,12 @@
       ; (mother-of.n |John|)
       (lex-noun? term?)
       (lex-function? term?)
-      (n+preds noun? (+ pred?))))
+      (n+preds noun? (+ pred?))
+      (noun? lex-coord? (+ noun?))
+      
+      ;; Fall back if arguments not correctly analyzed.
+      (n+preds _+)
+      ))
 
 (defparameter *ttt-adj*
   '(! lex-adjective?
@@ -25,6 +30,7 @@
       (adj? (to verb?))
       ;; Some adjectives take arguments.
       (adj? (lex-p-arg? term?))
+      (adj? lex-coord? (+ adj?))
       ))
 
 (defparameter *ttt-adv-a*
@@ -33,22 +39,29 @@
       ;; Below is not quite correct since some *.pq map to (adv-e ...), but for
       ;; the sake of this syntax checker it doesn't matter.
       lex-pq? 
+      (adv-a? lex-coord? (+ adv-a?))
       ))
 
 (defparameter *ttt-adv-e*
    '(! lex-adv-e?
-      (adv-e pred?)))
+      (adv-e pred?)
+      (adv-e? lex-coord? (+ adv-e?))
+      ))
 
 (defparameter *ttt-adv-s*
    '(! lex-adv-s?
-      (adv-s pred?)))
+      (adv-s pred?)
+      (adv-s? lex-coord? adv-s?)))
 
 (defparameter *ttt-adv-f*
    '(! lex-adv-f?
-      (adv-f pred?)))
+      (adv-f pred?)
+      (adv-f? lex-coord? adv-f?)
+      ))
 
 (defparameter *ttt-pp*
-   '(lex-p? term?))
+   '(! (lex-p? term?)
+       (pp? lex-coord? (+ pp?))))
 
 (defparameter *ttt-term*
   '(! lex-pronoun?
@@ -56,6 +69,7 @@
       lex-number?
       (det? noun?)
       (set-of (+ term?))
+      (term? lex-coord? (+ term?))
       ;; Reified
       (noun-reifier? noun?)
       (verb-reifier? verb?)
@@ -71,6 +85,10 @@
       (np+preds term? (+ pred?))
       ;; Object quoted expression.
       (|"| _+ |"|) ; same as (\" .. \"), but breaks the syntax highlighting less.
+      ;; Fall back if np+preds arguments not analyzed correctly.
+      (np+preds _+)
+      ((_!1 's) _!2)
+      
       ;; Rather than building a whole set of types corresponding to versions 
       ;; with the hole contained, I'll just check it dynamically.
       [*]h
@@ -84,12 +102,21 @@
        (verb? (+ adv-a?))
        (aux? verb?)
        (verb? adv-a? term?)
-       (lex-coord? (+ verb?))))
+       ((? verb?) lex-coord? (+ verb?))
+       
+       ;; Fall back if arguments not analyzed correctly.
+       (verb? _!)
+       ))
 
 (defparameter *ttt-pred*
    '(! verb? noun? adj? tensed-verb? pp?
        (lex-rel? pred?)
-       (sub lex-rel? sent?)))
+       (sub lex-rel? sent?)
+       
+       ;; Fall back on arguments not analyzed correctly.
+       (lex-rel? _!)
+       (sub lex-rel? _!)
+       ))
 
 (defparameter *ttt-aux*
   '(! lex-aux? perf prog))

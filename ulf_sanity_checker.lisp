@@ -97,14 +97,14 @@
      ); end of labels definitions.
     
     ;; Main body, run the preprocessing functions.
-    (let* ((pair (extract-sent-ops f))
+    (let* ((subres (multiple-value-list
+                     (apply-sub-macro f)))
+           (subf (second subres))
+           (pair (extract-sent-ops subf))
            (paren-remvd (list (remove-extra-parens (first pair)) 
                               (second pair)))
-           (subres (multiple-value-list
-                     (apply-sub-macro paren-remvd)))
-           (subf (second subres))
            (uninv (ttt:apply-rule *ttt-uninvert-verbaux*
-                                  subf)))
+                                  paren-remvd)))
       uninv)))
         
 

@@ -26,7 +26,7 @@
   '(!1 ((!2 tensed-sent-reifier? lex-ps?) _! _+)
       ((!3 tensed-sent-reifier? lex-ps?) (! ~ tensed-sent?))))
 (defparameter *bad-tensed-sent-op-msg* 
-  "that/tht/*.ps take a single tensed sentence argument.")
+  "that/tht/whether/ans-to take a single tensed sentence argument.")
 
 (defparameter *ttt-bad-sent-op*
   '(!1 (sent-reifier? _! _+)
@@ -40,7 +40,14 @@
       (verb-reifier? (! ~ verb?))
       (_+ verb-reifier? _*)))
 (defparameter *bad-verb-reifier-msg* 
-  "ka/to take a single untensed verb argument.")
+  "ka/to/gd take a single untensed verb argument.")
+
+(defparameter *ttt-bad-noun-reifier*
+  '(!1 (noun-reifier? _! _+)
+       (noun-reifier (! ~ noun?))
+       (_+ noun-reifier? _*)))
+(defparameter *bad-noun-reifier-msg* 
+  "k takes a single nominal argument.")
 
 (defparameter *ttt-bad-plur*
   '(!1 (plur _! _+)
@@ -148,6 +155,7 @@
 (defun bad-tensed-sent-op? (x) (ttt:match-expr *ttt-bad-tensed-sent-op* x))
 (defun bad-sent-op? (x) (ttt:match-expr *ttt-bad-sent-op* x))
 (defun bad-verb-reifier? (x) (ttt:match-expr *ttt-bad-verb-reifier* x))
+(defun bad-noun-reifier? (x) (ttt:match-expr *ttt-bad-noun-reifier* x))
 (defun bad-plur? (x) (ttt:match-expr *ttt-bad-plur* x))
 (defun bad-aux? (x) (ttt:match-expr *ttt-bad-aux* x))
 (defun bad-advformer? (x) (ttt:match-expr *ttt-bad-advformer* x))
@@ -171,6 +179,7 @@
     (list #'bad-tensed-sent-op? *bad-tensed-sent-op-msg*)
     (list #'bad-sent-op? *bad-sent-op-msg*)
     (list #'bad-verb-reifier? *bad-verb-reifier-msg*)
+    (list #'bad-noun-reifier? *bad-noun-reifier-msg*)
     (list #'bad-plur? *bad-plur-msg*)
     (list #'bad-aux? *bad-aux-msg*)
     (list #'bad-advformer? *bad-advformer-msg*)

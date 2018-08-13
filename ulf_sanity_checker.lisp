@@ -152,7 +152,7 @@
 
 (defun sanity-check (f)
   (let* ((rawpatternres
-           (list (bad-pattern-check f *raw-bad-pattern-test-pairs* t)))
+           (bad-pattern-check f *raw-bad-pattern-test-pairs* t))
          (preprocd (preprocess f))
          (linesep (format nil "************************************~%"))
          (patternres 

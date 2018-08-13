@@ -75,12 +75,27 @@ def check_escape(s):
 def bracket_filter(s):
   return re.sub(r'(?<!\\)([{}])', r'', s)
 
+# Add a space before all ULF names that are in uppercase.
+def name_preprocess(s):
+  namepat = r"\|.*\|"
+  ms = re.finditer(namepat, s)
+  curstr = s
+  foundcount = 0
+  for m in ms:
+    txt = m.group(0)
+    if txt.upper() == txt:
+      idx = m.start() + 1 + foundcount
+      foundcount += 1
+      curstr = curstr[:idx] + " " + curstr[idx:]
+  return curstr
+
 def preproc(s):
   bracket_filtered = bracket_filter(s)
   quoted = quote_pre(bracket_filtered)
   escape_res = check_escape(quoted)
+  name_preprocd = name_preprocess(quoted)
   #print escape_res[1]
-  return quoted
+  return name_preprocd
 
 def main():
   if len(sys.argv) < 3:

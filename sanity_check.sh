@@ -5,7 +5,7 @@ CHECKER_DIR="../ulf_sanity_checker"
 
 CURDIR=$(pwd)
 
-TEMPFILE="temp.preprocessed"
+TEMPFILE=$(mktemp temp.preprocessed.XXXXXXXX)
 
 cd $CHECKER_DIR
 

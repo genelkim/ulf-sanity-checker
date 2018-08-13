@@ -66,7 +66,7 @@
 ;;; Rule to uninvert sentences with verb/auxiliary inversion, e.g. questions.
 (defparameter *ttt-uninvert-verbaux*
   '(/ ((lex-tense? lex-verbaux?) term? _+)
-      (uninvert-verbaux! ((tense? lex-verbaux?) term? _+))))
+      (uninvert-verbaux! ((lex-tense? lex-verbaux?) term? _+))))
 
 ;;; Takes a sentence of the form 
 ;;; ((<tense> verb/aux) NP VP ADV1 .. ADVn)

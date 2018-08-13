@@ -28,8 +28,12 @@
       (poss-by term?)
       ;; Some adjectives take infinitives.
       (adj? (to verb?))
-      ;; Some adjectives take arguments.
+      ;; Some adjectives take two arguments.
+      ;; "jewelry worth $400"
+      (lex-adjective? term?)
+      ;; Some adjectives take arguments with prepositions..
       (adj? (lex-p-arg? term?))
+      ;; Coordination.
       (adj? lex-coord? (+ adj?))
       ))
 
@@ -61,12 +65,19 @@
 
 (defparameter *ttt-pp*
    '(! (lex-p? term?)
-       (pp? lex-coord? (+ pp?))))
+       (pp? lex-coord? (+ pp?))
+       ;; "just outside Boston" -- (just.adv-a (outside.p |Boston|))
+       (adv-a? pp?)
+
+       ;; Fall back, anything starting with *.p
+       (lex-p? _+)
+       ))
 
 (defparameter *ttt-term*
   '(! lex-pronoun?
       lex-name?
       lex-number?
+      lex-rel?
       (det? noun?)
       (set-of (+ term?))
       (term? lex-coord? (+ term?))
@@ -88,7 +99,16 @@
       ;; Fall back if np+preds arguments not analyzed correctly.
       (np+preds _+)
       ((_!1 's) _!2)
-      
+      ;; Fall back for reifiers.  Assume any expression starting with a reifier
+      ;; is a term.
+      (noun-reifier? _+)
+      (verb-reifier? _+)
+      (sent-reifier? _+)
+      (tensed-sent-reifier? _+)
+      ;; Fall back on determiners and set-of.
+      (set-of _+)
+      (det? _+)
+
       ;; Rather than building a whole set of types corresponding to versions 
       ;; with the hole contained, I'll just check it dynamically.
       [*]h
@@ -112,7 +132,7 @@
    '(! verb? noun? adj? tensed-verb? pp?
        (lex-rel? pred?)
        (sub lex-rel? sent?)
-       
+
        ;; Fall back on arguments not analyzed correctly.
        (lex-rel? _!)
        (sub lex-rel? _!)

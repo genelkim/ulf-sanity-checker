@@ -77,7 +77,7 @@ def bracket_filter(s):
 
 # Add a space before all ULF names that are in uppercase.
 def name_preprocess(s):
-  namepat = r"\|.*\|"
+  namepat = r"\|[^\|]+\|"
   ms = re.finditer(namepat, s)
   curstr = s
   foundcount = 0

@@ -34,16 +34,26 @@
     ((eq (first ulf) 'sub)
      (if (and fail-on-bad-use (not (equal (length ulf) 3)))
        (return-from apply-sub-macro (values nil ulf)))
-     (multiple-value-bind (recsuc recres) 
-                          (apply-sub-macro (third ulf) fail-on-bad-use)
+     
+     (let* ((leftrec 
+              (multiple-value-list 
+                (apply-sub-macro (second ulf) fail-on-bad-use)))
+            (rightrec 
+              (multiple-value-list
+                (apply-sub-macro (third ulf) fail-on-bad-use)))
+            (lrsuc (first leftrec))
+            (lrres (second leftrec))
+            (rrsuc (first rightrec))
+            (rrres (second rightrec)))
        (cond
          ;; If the recursion failed, propagate results.
-         ((not recsuc) (values recsuc recres))
+         ((not lrsuc) (values lrsuc lrres))
+         ((not rrsuc) (values rrsuc rrres))
          ;; If the recrusive result doesn't have a *h, return with failure.
-         ((and fail-on-bad-use (not (contains-hole recres)))
-          (values nil (list (first ulf) (second ulf) recres)))
+         ((and fail-on-bad-use (not (contains-hole rrres)))
+          (values nil (list (first ulf) lrres rrres)))
          ;; Apply substitution and return result.
-         (t (values t (subst (second ulf) '*h recres))))))
+         (t (values t (subst lrres '*h rrres))))))
     ;; Otherwise, just recursive into all.  If there's a failure, return
     ;; it.  Otherwise, merge together.
     (t (let* ((recres (mapcar #'(lambda (x) 

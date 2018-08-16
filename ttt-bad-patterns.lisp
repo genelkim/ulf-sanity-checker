@@ -148,6 +148,19 @@
 (defparameter *bad-single-bracket-msg*
   "Brackets should not scope around a single constituent (need at least two members in its scope as an operator-operand pair).")
 
+(defun contains-sub-var? (x)
+  (ttt:match-expr '(^* [*h]) x))
+(defparameter *ttt-bad-sub*
+  '(!1 
+     (sub _!)
+     (sub)
+     (sub _!2 _!3 _+)
+     (_+ sub _*)
+     (sub _!4 (!5 ~ contains-sub-var?))
+     ))
+(defparameter *bad-sub-msg*
+  "'sub' operator should take two arguments and the second argument should contain a '*h'")
+
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt:match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt:match-expr *ttt-bad-prep* x))
@@ -170,6 +183,7 @@
 (defun bad-pu? (x) (ttt:match-expr *ttt-bad-pu* x))
 (defun bad-flat-mod? (x) (ttt:match-expr *ttt-bad-flat-mod* x))
 (defun bad-single-bracket? (x) (ttt:match-expr *ttt-bad-single-bracket* x))
+(defun bad-sub? (x) (ttt:match-expr *ttt-bad-sub* x))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -199,5 +213,6 @@
 (defparameter *raw-bad-pattern-test-pairs*
   (list
     (list #'bad-single-bracket? *bad-single-bracket-msg*)
+    (list #'bad-sub? *bad-sub-msg*)
     ))
 

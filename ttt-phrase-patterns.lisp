@@ -35,6 +35,8 @@
       (adj? (lex-p-arg? term?))
       ;; Coordination.
       (adj? lex-coord? (+ adj?))
+      ;; Equal sign with term.
+      (= term?)
       ))
 
 (defparameter *ttt-adv-a*
@@ -91,7 +93,7 @@
       ;; Prepositional argument.s
       (lex-p-arg? term?)
       ;; Possessive macro.
-      ((term? 's) noun?)
+      (preposs-macro? noun?)
       ;; np+preds.
       (np+preds term? (+ pred?))
       ;; Object quoted expression.
@@ -162,7 +164,8 @@
       (sent-mod? sent?)    ; sentence modifier, sentence
       (sent? sent-mod?)    ; sentence, sentence modifier
       (adv-a? term? verb?) ; action adverb, subject, verb
-      (sent? sent-punct?))); sentence with punctuation 
+      (sent? sent-punct?)  ; sentence with punctuation 
+      (term? = term?)))    ; equality
 
 (defparameter *ttt-tensed-sent*
   '(! ;; Simple sentence.
@@ -199,6 +202,10 @@
   '(!1 
       (lex-coord? (!2 tensed-sent? sent?))))
 
+(defparameter *ttt-preposs-macro*
+  '(term? 's))
+
+
 (defun noun? (x) (ttt:match-expr *ttt-noun* x))
 (defun adj? (x) (ttt:match-expr *ttt-adj* x))
 (defun adv-a? (x) (ttt:match-expr *ttt-adv-a* x))
@@ -216,6 +223,8 @@
 (defun sent? (x) (ttt:match-expr *ttt-sent* x))
 (defun tensed-sent? (x) (ttt:match-expr *ttt-tensed-sent* x))
 (defun sent-mod? (x) (ttt:match-expr *ttt-sent-mod* x))
+
+(defun preposs-macro? (x) (ttt:match-expr *ttt-preposs-macro* x))
 
 (defun record-type? (x) (member x *record-types*))
 (defun sent-punct? (x)
@@ -262,7 +271,9 @@
         (list #'sent-reifier? 'sent-reifier)
         (list #'tensed-sent-reifier? 'tensed-sent-reifier)
         (list #'advformer? 'advformer)
-        (list #'detformer? 'detformer)))
+        (list #'detformer? 'detformer)
+        (list #'preposs-macro? 'preposs-macro)
+        ))
 
 ;; Hypothesizes the type of the given ULF formula.
 (defun ulf-type? (x)

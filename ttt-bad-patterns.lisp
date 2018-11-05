@@ -51,6 +51,31 @@
 (defparameter *bad-noun-reifier-msg*
   "k takes a single nominal argument.")
 
+(defparameter *ttt-conservative-bad-sent-reifier*
+  '(!1 
+     (sent-reifier? _! _+)
+     (sent-reifier? term?)
+     (_+ sent-reifier? _*)
+     (tensed-sent-reifier? _! _+)
+     (tensed-sent-reifier? term?)
+     (_+ tensed-sent-reifier? _*)))
+(defparameter *conservative-bad-sent-reifier-msg*
+  "ke/that/tht/whether/ans-to cannot take a term argument, and take a single argument each")
+
+;(defparameter *ttt-bad-sent-reifier*
+;  '(!1 (sent-reifier? _! _+)
+;       (sent-reifier? (! ~ sent?))
+;       (_+ sent-reifier? _*)))
+;(defparameter *bad-sent-reifier-msg*
+;  "ke takes a single untensed sentence argument.")
+;
+;(defparameter *ttt-bad-tensed-sent-reifier*
+;  '(!1 (tensed-sent-reifier? _! _+)
+;       (tensed-sent-reifier? (! ~ tensed-sent?))
+;       (_+ tensed-sent-reifier? _*)))
+;(defparameter *bad-tensed-sent-reifier-msg*
+;  "that/tht/whether/ans-to take a single tensed sentence argument.")
+
 (defparameter *ttt-bad-plur*
   '(!1 (plur _! _+)
       (plur (! ~ noun?))
@@ -200,6 +225,27 @@
 (defparameter *bad-rel-sent-msg*
   "A relativizer (*.rel) must sit inside of a tensed sentence.")
 
+(defparameter *ttt-bad-noun-pp*
+  '(!1
+     (noun? pp?)))
+(defparameter *bad-noun-pp-msg*
+  "A noun cannot be directly combined with a prepositional phrase.  Either use an n+preds variant or use a type-shifter.")
+
+(defparameter *ttt-bad-verb-sent*
+  '(!1
+     (verb? sent?)
+     (verb? tensed-sent?)))
+(defparameter *bad-verb-sent-msg*
+  "A verb cannot be directly combined with a sentence.")
+
+(defparameter *ttt-bad-aux-before-arg*
+  '(!1
+     ((aux? verb?) (* adv-a?) term?)
+     ((tensed-aux? verb?) (* adv-a?) term?)
+     (((* adv-a?) (aux? verb?) (* adv-a?)) term?)))
+(defparameter *bad-aux-before-arg-msg*
+  "The auxiliary should be applied after all non-subject arguments.")
+
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt:match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt:match-expr *ttt-bad-prep* x))
@@ -230,6 +276,11 @@
   (and (contains-relativizer x)
        (sent? x)
        (not (tensed-sent? x))))
+(defun conservative-bad-sent-reifier? (x)
+  (ttt:match-expr *ttt-conservative-bad-sent-reifier*))
+(defun bad-noun-pp? (x) (ttt:match-expr *ttt-bad-noun-pp*))
+(defun bad-verb-sent? (x) (ttt:match-expr *ttt-bad-verb-sent*))
+(defun bad-aux-before-arg? (x) (ttt:match-expr *ttt-bad-aux-before-arg*))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -254,6 +305,10 @@
     (list #'bad-pu? *bad-pu-msg*)
     (list #'bad-flat-mod? *bad-flat-mod-msg*)
     (list #'bad-equal? *bad-equal-msg*)
+    (list #'conservative-bad-sent-reifier? *conservative-bad-sent-reifier-msg*)
+    (list #'bad-noun-pp? *bad-noun-pp-msg*)
+    (list #'bad-verb-sent? *bad-verb-sent-msg*)
+    (list #'bad-aux-before-arg? *bad-aux-before-arg-msg*)
     ))
 
 ;; Same as above but run on raw formulas (before preprocessing).

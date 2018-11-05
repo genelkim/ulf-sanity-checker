@@ -126,7 +126,7 @@
 
 (defparameter *ttt-bad-sent-punct*
   '(!1 (_! _+ sent-punct?) ; more than 1 arg.
-      ((! ~ tensed-sent?) sent-punct?))) ; arg is not a tensed sentence.
+      ((! ~ tensed-sent? unknown?) sent-punct?))) ; arg is not a tensed sentence.
 (defparameter *bad-sent-punct-msg*
   "Sentence punctuation takes a single tensed sentence argument and is post-fixed.")
 
@@ -162,7 +162,7 @@
   "The 'pu' operator takes a single phrase.")
 
 (defparameter *ttt-bad-flat-mod*
-  '(_*1
+  '((*1 ~ verb?)
      (!2 adj? noun? term?)
      (!3 adj? noun? term?)
      (!4 adj? noun? term?)
@@ -246,6 +246,67 @@
 (defparameter *bad-aux-before-arg-msg*
   "The auxiliary should be applied after all non-subject arguments. You can IGNORE this message if this is occurring within it-extra.pro.")
 
+(defparameter *ttt-bad-pasv*
+  '(!1
+     (_+ pasv _*)
+     (pasv (! ~ lex-verb?))))
+(defparameter *bad-pasv-msg*
+  "'pasv' must be in the following construction (pasv <verb>).")
+
+(defparameter *ttt-bad-inv-pasv*
+  '(!1 
+     ((pasv _!) term? _*)
+     ((lex-tense? (pasv _!)) term? _*)))
+(defparameter *bad-inv-pasv-msg*
+  "'pasv' should be manually uninverted.")
+
+(defparameter *ttt-bad-verb-args*
+  '(!1
+     (((! verb? tensed-verb?) _*1 (! term? p-arg? pred?) _*2) _*3 (! term? p-arg? pred?) _*4)))
+(defparameter *bad-verb-args-msg*
+  "Verbs (both tensed and untensed) *must* take all non-subject arguments in a flat construction.")
+
+(defparameter *ttt-bad-adv-a-arg*
+  '(!1
+     (((! verb? tensed-verb?) adv-a?) _*1 (! term? p-arg? pred?) _*2)
+     ((adv-a? (! verb? tensed-verb?)) _*1 (! term? p-arg? pred?) _*2)))
+(defparameter *bad-adv-a-arg-msg*
+  "All non-subject arguments must by supplied to the verb before directly applying action adverbs.")
+
+(defparameter *ttt-suspicious-locative*
+  '(!1 here.pro there.pro where.pro))
+(defparameter *suspicious-locative-msg*
+  "Suspicious: 'Here' and 'there' probably shouldn't be annotated with *.pro, since they're usually not substitutable with other generic terms.  It's usually *.adv-e or *.a.  Please double check.")
+
+(defparameter *ttt-suspicious-do*
+  '(_*1 do.aux-v _*2))
+(defparameter *suspicious-do-msg*
+  "Suspicious: 'do.aux-v' is only used for emphatic do.")
+
+(defparameter *ttt-suspicious-will*
+  '(_*1 will.aux-v _*2))
+(defparameter *suspicious-will-msg*
+  "Suspicious: 'will.aux-v' is only used when 'will.aux-s' doesn't make sense and 'will' is used for emphasis.")
+
+(defparameter *ttt-bad-name-decomp*
+  '(+ lex-name? lex-name-pred?))
+(defparameter *bad-name-decomp-msg*
+  "Names and name predicates should only be broken down on prepositions.")
+
+(defparameter *ttt-bad-voc*
+  '(!1 (voc (! ~ term? unknown?))
+       (voc-O (! ~ term? unknown?))
+       (_+ (! voc voc-O) _*)
+       ((! voc voc-O) _! _+)))
+(defparameter *bad-voc-msg*
+  "Vocative operators ('voc', 'voc-O') take a single term argument.")
+
+(defparameter *ttt-bad-sent-term*
+  '(!1 (term? (! sent? tensed-sent?))
+       ((! sent? tensed-sent?) term?)))
+(defparameter *bad-sent-term-msg*
+  "Sentences and terms cannot combine.")
+
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt:match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt:match-expr *ttt-bad-prep* x))
@@ -281,6 +342,16 @@
 (defun bad-noun-pp? (x) (ttt:match-expr *ttt-bad-noun-pp* x))
 (defun bad-verb-sent? (x) (ttt:match-expr *ttt-bad-verb-sent* x))
 (defun bad-aux-before-arg? (x) (ttt:match-expr *ttt-bad-aux-before-arg* x))
+(defun bad-pasv? (x) (ttt:match-expr *ttt-bad-pasv* x))
+(defun bad-verb-args? (x) (ttt:match-expr *ttt-bad-verb-args* x))
+(defun suspicious-locative? (x) (ttt:match-expr *ttt-suspicious-locative* x))
+(defun suspicious-do? (x) (ttt:match-expr *ttt-suspicious-do* x))
+(defun suspicious-will? (x) (ttt:match-expr *ttt-suspicious-will* x))
+(defun bad-name-decomp? (x) (ttt:match-expr *ttt-bad-name-decomp* x))
+(defun bad-voc? (x) (ttt:match-expr *ttt-bad-voc* x))
+(defun bad-inv-pasv? (x) (ttt:match-expr *ttt-bad-inv-pasv* x))
+(defun bad-sent-term? (x) (ttt:match-expr *ttt-bad-sent-term* x))
+(defun bad-adv-a-arg? (x) (ttt:match-expr *ttt-bad-adv-a-arg* x))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -309,6 +380,14 @@
     (list #'bad-noun-pp? *bad-noun-pp-msg*)
     (list #'bad-verb-sent? *bad-verb-sent-msg*)
     (list #'bad-aux-before-arg? *bad-aux-before-arg-msg*)
+    (list #'bad-pasv? *bad-pasv-msg*)
+    (list #'bad-verb-args? *bad-verb-args-msg*)
+    (list #'suspicious-locative? *suspicious-locative-msg*)
+    (list #'suspicious-do? *suspicious-do-msg*)
+    (list #'suspicious-will? *suspicious-will-msg*)
+    (list #'bad-name-decomp? *bad-name-decomp-msg*)
+    (list #'bad-sent-term? *bad-sent-term-msg*)
+    (list #'bad-adv-a-arg? *bad-adv-a-arg-msg*) 
     ))
 
 ;; Same as above but run on raw formulas (before preprocessing).
@@ -319,5 +398,7 @@
     (list #'bad-rep? *bad-rep-msg*)
     (list #'bad-qt-attr? *bad-qt-attr-msg*)
     (list #'bad-rel-sent? *bad-rel-sent-msg*)
+    (list #'bad-voc? *bad-voc-msg*)
+    (list #'bad-inv-pasv? *bad-inv-pasv-msg*)
     ))
 

@@ -122,5 +122,5 @@
 
 (defun lex-equal? (x) (equal x '=))
 (defun lex-set-of? (x) (equal x 'set-of))
-(defun lex-macro? (x) (member x '(qt-attr sub rep n+preds np+preds)))
+(defun lex-macro? (x) (member x '(qt-attr sub rep n+preds np+preds voc voc-O)))
 

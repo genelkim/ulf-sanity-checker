@@ -73,15 +73,29 @@
 (defun lex-verbaux? (x)
   (or (lex-verb? x) (aux? x))) 
 
-;;; Rule to uninvert sentences with verb/auxiliary inversion, e.g. questions.
+;;; Rules to uninvert sentences with verb/auxiliary inversion, e.g. questions.
+;;; This assumes that any interleaved sentence operators have been lifted out.
 (defparameter *ttt-uninvert-verbaux*
-  '(/ ((lex-tense? lex-verbaux?) term? _+)
-      (uninvert-verbaux! ((lex-tense? lex-verbaux?) term? _+))))
+  '(
+    ;; If it's an inverted auxiliary, eagerly uninvert.
+    (/ ((lex-tense? lex-aux?) term? _+)
+       (uninvert-verbaux! ((lex-tense? lex-aux?) term? _+)))
+    ;; If it's a verb, only uninvert if we're in a question.
+    ;; TODO: this actually needs to be more sophisticated.  We can look at the
+    ;; composition of the inverted and uninverted versions and choose the one
+    ;; that is coherent.
+    (/ (((lex-tense? lex-verb?) term? _+) [?])
+       ((uninvert-verbaux! ((lex-tense? lex-verb?) term? _+)) [?]))))
 
 ;;; Takes a sentence of the form 
 ;;; ((<tense> verb/aux) NP VP ADV1 .. ADVn)
 ;;; and transforms it to
 ;;; (NP ((((<tense> verb/aux) VP) ADV1) ... ADVn))
+;;;
+;;; TODO: need to do something fancier, like identifying continuous adverbs
+;;; from the end and wrapping those.  Otherwise, supply the arguments flat.
+;;; For example: "Made he a table for John?"
+;;;   (((past make.v) he.pro (a.d table.n) (for.p-arg |John|)) ?)
 (defun uninvert-verbaux! (ulf)
   (if (< (length ulf) 3)
     (return-from 'uninvert-verbaux! nil))
@@ -92,5 +106,20 @@
     (list np
           (reduce #'list remain :initial-value (list headva vp)))))
 
+;; Function to uninvert verbauxes from a given ULFs.
+(defun uninvert-verbauxes (ulf)
+  (let ((ttthidden (hide-ttt-ops ulf)))
+    (unhide-ttt-ops (ttt:apply-rules *ttt-uninvert-verbaux*
+                                     ttthidden))))
 
+;; Lift adv-a that are mixed in with verb arguments.
+(defparameter *ttt-lift-adv-a*
+  '((/ ((! verb? tensed-verb?) _+1 adv-a? _*2)
+       (adv-a? (! _+1 _*2)))
+    (/ ((! verb? tensed-verb?) _*1 adv-a? _+2)
+       (adv-a? (! _*1 _+2)))))
+(defun lift-adv-a (ulf)
+  (let ((ttthidden (hide-ttt-ops ulf)))
+    (unhide-ttt-ops (ttt:apply-rules *ttt-lift-adv-a*
+                                     ttthidden))))
 

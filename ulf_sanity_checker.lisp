@@ -39,12 +39,6 @@
 ;   -> if (p1.v/a (*.p ..)), then ask if this is an adverb.
 ;   Exception: (*.p-arg ..) is an argument.
 ; - each embedded sentence only has one tense op
-; - Check plurals with plural form dictionary
-;   currency <= 2 args
-;       currency name : symbol 
-;       amount : number
-;   address <= 6 args
-;       all terms (numbers, names, or (k *.n))
 ; - check tense (get past-participle list and check)
 ; 
 ; Preprocessing checks (TODO)
@@ -118,6 +112,27 @@
             (t (cons (unhide-ttt-ops (car wff)) (unhide-ttt-ops (cdr wff)))))
  )); end of unhide-ttt-ops
 
+
+;; Walks through the formula f and extracts out categories that satisfy catfn.
+;; Formula constituents that satisfy ign-cnd-fn are ignored, so elements 
+;; satisfying catfn directly within them are ignored.
+(defun extract-category (f catfn ign-cnd-fn)
+  (if (atom f) (list f '())
+    (let* ((split 
+             ;; Only filter out sentence ops if there are at least two
+             ;; elements.  If there are two, then we treat sentence 
+             ;; operators as locally applied.
+             (if (funcall ign-cnd-fn f)
+               (list f nil)
+               (split-by-cond f catfn)))
+           (no-sent-ops (first split))
+           (sent-ops (second split))
+           (recursed (mapcar #'(lambda (x) 
+                                 (extract-category x catfn ign-cnd-fn)) 
+                             no-sent-ops)))
+      (list (mapcar #'first recursed)
+            (apply #'append (cons sent-ops (mapcar #'second recursed)))))))
+
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
 ;; Apply sub macros
@@ -127,18 +142,18 @@
 (defun preprocess (f)
   (labels
     (
-          
      ; Extract sentence-level operators.
      ; Returns (sent-op-filtered-f, list-of-sent-ops)
      (extract-sent-ops
        (f)
-       (if (atom f) (list f '())
-         (let* ((split (split-by-cond f #'phrasal-sent-op?))
-                (no-sent-ops (first split))
-                (sent-ops (second split))
-                (recursed (mapcar #'extract-sent-ops no-sent-ops)))
-           (list (mapcar #'first recursed)
-                 (apply #'append (cons sent-ops (mapcar #'second recursed)))))))
+       (extract-category f #'phrasal-sent-op? 
+                         #'(lambda (x) (<= (length x) 2))))
+
+     ;; Extracts vocatives.
+     (extract-vocs (f)
+       (extract-category f #'voc? #'(lambda (x) nil)))
+
+     ;; Removes double parens.
      (remove-extra-parens
        (f)
        (cond
@@ -151,13 +166,21 @@
     (let* ((subres (multiple-value-list
                      (apply-sub-macro f)))
            (subf (second subres))
-           (pair (extract-sent-ops subf))
-           (paren-remvd (list (remove-extra-parens (first pair)) 
-                              (second pair)))
-           (uninv (ttt:apply-rule *ttt-uninvert-verbaux*
-                                  paren-remvd)))
-      uninv)))
-        
+           (adv-a-lifted (lift-adv-a subf))
+           (sent-op-pair (extract-sent-ops adv-a-lifted))
+           (voc-pair (extract-vocs sent-op-pair))
+           (main-sent (first (first voc-pair)))
+           (sent-ops (second (first voc-pair)))
+           (vocs (second voc-pair))
+           (paren-remvd-main-sent (remove-extra-parens main-sent))
+           (uninv (uninvert-verbauxes paren-remvd-main-sent))
+           (regrouped (list uninv sent-ops vocs)))
+      (format t "sent-op-pair ~s~%~%" sent-op-pair)
+      (format t "voc-pair ~s~%~%" voc-pair)
+      (format t "main-sent ~s~%~%" main-sent)
+      (format t "paren-remvd-main-sent ~s~%~%" paren-remvd-main-sent)
+      (format t "uninv ~s~%~%" uninv)
+      regrouped)))
 
 
 ;; Recursively check for bad patterns on formula f.
@@ -185,6 +208,7 @@
                  (apply #'append 
                         (mapcar #'second indres)))
            nil)))); end of labels definitions.
+    ;; Main body.
     (cond
       ((atom f) '())
       (t (let ((recres (apply #'append 
@@ -197,10 +221,7 @@
              recres))))))
 
 
-
-
-
-
+;; Main sanity checking function.
 (defun sanity-check (f)
   (let* ((rawpatternres
              (bad-pattern-check 
@@ -251,6 +272,4 @@
     (format t linesep)
     (format t "~s~%~%" (mapcar #'label-formula-types preprocd))
     ))
-
-
 

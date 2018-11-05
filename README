@@ -1,3 +1,7 @@
+ULF Sanity Checker v2.0 was built for the 2018 IA experiment where some new
+annotation guidelines were introduced.  Notably, the new, flat non-subject
+argument structure strays from the inital sanity checker design.
+
 This needs to be run in cs.rochester.edu
 
 **Before starting the description, please remember this was quickly written up and minimally tested so there could be errors.  *Always* think about whether there is in fact an error before making changes.**

@@ -10,9 +10,11 @@
       (lex-name? noun?)
       ; (mother-of.n |John|)
       (lex-noun? term?)
+      (noun? p-arg?)
       (lex-function? term?)
       (n+preds noun? (+ pred?))
       (noun? lex-coord? (+ noun?))
+      (n+post noun? (+ pred? term? adv? p-arg? unknown?))
 
       ;; Fall back if arguments not correctly analyzed.
       (n+preds _+)
@@ -29,8 +31,8 @@
       ;; Some adjectives take two arguments.
       ;; "jewelry worth $400"
       (lex-adjective? term?)
-      ;; Some adjectives take arguments with prepositions..
-      (adj? (lex-p-arg? term?))
+      ;; Some adjectives take arguments with prepositions.
+      (adj? p-arg?)
       ;; Coordination.
       (adj? lex-coord? (+ adj?))
       ;; Equal sign with term.
@@ -75,6 +77,12 @@
        (lex-p? _+)
        ))
 
+;; This needs its own category because it can't act generally as terms or
+;; predicates.  It has to be an argument to something.
+(defparameter *ttt-p-arg*
+  '(! (lex-p-arg? term?)
+      (lex-p-arg? pred?)))
+
 ;; Terms.
 (defparameter *ttt-term*
   '(! lex-pronoun?
@@ -91,8 +99,6 @@
       (tensed-sent-reifier? tensed-sent?)
       ;; Domain specific syntax.
       (ds _! litstring?)
-      ;; Prepositional argument.s
-      (lex-p-arg? term?)
       ;; Possessive macro.
       (preposs-macro? noun?)
       ;; np+preds.
@@ -125,11 +131,11 @@
 (defparameter *ttt-verb*
   '(! lex-verb?
       (pasv lex-verb?)
-      (verb? (+ (! term? pred?)))
+      (verb? (+ (! term? pred? adv-a? p-arg?)))
       (adv-a? verb?)
-      (verb? (+ adv-a?))
+      ;(verb? (+ adv-a?))
       (aux? verb?)
-      (verb? adv-a? term?)
+      ;(verb? adv-a? term?)
       ((? verb?) lex-coord? (+ verb?))
 
       ;; FALL BACK ANALYSIS.
@@ -166,7 +172,7 @@
 
 (defparameter *ttt-tensed-verb*
   '(! (lex-tense? verb?)
-      (tensed-verb? (? (! term? pred?)) (! term? pred?))
+      (tensed-verb? (+ term? pred? adv-a? p-arg?))
       (tensed-aux? verb?)
       (adv-a? tensed-verb?)
       (tensed-verb? (+ adv-a?))
@@ -209,7 +215,7 @@
       ;; Inverted sentence.
       ((lex-tense? (!2 lex-verb? aux?)) term? verb?)
       ;; Phrasal utterances.
-      (pu _!1)
+      (pu (! ~ sent? tensed-sent?))
       ;; Multiple sentences stuck together (e.g. some multi-sentence annotations).
       (tensed-sent? (+ tensed-sent?))
       ;; Expletives are treated as tensed sentences.
@@ -229,6 +235,11 @@
 (defparameter *ttt-preposs-macro*
   '(term? 's))
 
+(defparameter *ttt-voc*
+  '(!1 
+     (voc term?) (voc-O term?)
+     ;; FALL BACK.
+     (voc _!) (voc-O _1)))
 
 (defun noun? (x) (ttt:match-expr *ttt-noun* x))
 (defun adj? (x) (ttt:match-expr *ttt-adj* x))
@@ -236,6 +247,7 @@
 (defun adv-e? (x) (ttt:match-expr *ttt-adv-e* x))
 (defun adv-s? (x) (ttt:match-expr *ttt-adv-s* x))
 (defun adv-f? (x) (ttt:match-expr *ttt-adv-f* x))
+(defun adv? (x) (or (adv-a? x) (adv-e? x) (adv-s? x) (adv-f? x)))
 (defun pp? (x) (ttt:match-expr *ttt-pp* x))
 (defun term? (x) (ttt:match-expr *ttt-term* x))
 (defun verb? (x) (ttt:match-expr *ttt-verb* x))
@@ -249,6 +261,8 @@
 (defun sent-mod? (x) (ttt:match-expr *ttt-sent-mod* x))
 
 (defun preposs-macro? (x) (ttt:match-expr *ttt-preposs-macro* x))
+(defun p-arg? (x) (ttt:match-expr *ttt-p-arg* x))
+(defun voc? (x) (ttt:match-expr *ttt-voc* x))
 
 (defun sent-punct? (x)
   (member x '(! ? .?)))
@@ -297,6 +311,7 @@
         (list #'detformer? 'detformer)
         (list #'preposs-macro? 'preposs-macro)
         (list #'relativized-sent? 'rel-sent)
+        (list #'p-arg? 'p-arg)
         ;; Purely lexical types.
         (list #'lex-equal? 'equal-sign)
         (list #'lex-set-of? 'set-of-op)

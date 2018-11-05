@@ -1,0 +1,3 @@
+((voc (np+preds you.pro rascal.n))
+ (sub (at.p (what.d place.n)) ((pres perf) you.pro (be.v *h)))
+ (voc |John|) ?)

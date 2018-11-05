@@ -6,7 +6,7 @@
 
 ;; Check if *x* has the *suffix* extension.
 (defun suffix-check (x suffix)
-  (match-re (concatenate 'string "^\(\\w\|\\d\|-\|\/\)\+\\." suffix "$")
+  (match-re (concatenate 'string "^\(\\w\|\\d\|-\|\/\|\\.\)\+\\." suffix "$")
             (format nil "~s" x)))
 
 (defun lex-noun? (x)
@@ -119,4 +119,8 @@
 
 (defun litstring? (x)
   (stringp x))
+
+(defun lex-equal? (x) (equal x '=))
+(defun lex-set-of? (x) (equal x 'set-of))
+(defun lex-macro? (x) (member x '(qt-attr sub rep n+preds np+preds)))
 

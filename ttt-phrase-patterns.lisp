@@ -16,7 +16,7 @@
       (lex-function? term?)
       (n+preds noun? (+ pred?))
       (noun? lex-coord? (+ noun?))
-      
+
       ;; Fall back if arguments not correctly analyzed.
       (n+preds _+)
       ))
@@ -25,6 +25,7 @@
   '(! lex-adjective?
       (adj? adj?)
       (adv-a? adj?)
+      (adj? adv-a?)
       (poss-by term?)
       ;; Some adjectives take infinitives.
       (adj? (to verb?))
@@ -44,7 +45,7 @@
       (adv-a pred?)
       ;; Below is not quite correct since some *.pq map to (adv-e ...), but for
       ;; the sake of this syntax checker it doesn't matter.
-      lex-pq? 
+      lex-pq?
       (adv-a? lex-coord? (+ adv-a?))
       ))
 
@@ -65,23 +66,26 @@
       (adv-f? lex-coord? adv-f?)
       ))
 
+;; Prepositional Phrase.
 (defparameter *ttt-pp*
    '(! (lex-p? term?)
        (pp? lex-coord? (+ pp?))
        ;; "just outside Boston" -- (just.adv-a (outside.p |Boston|))
        (adv-a? pp?)
+       (pp? adv-a?)
 
        ;; Fall back, anything starting with *.p
        (lex-p? _+)
        ))
 
+;; Terms.
 (defparameter *ttt-term*
   '(! lex-pronoun?
       lex-name?
       lex-number?
       lex-rel?
       (det? noun?)
-      (set-of (+ term?))
+      (lex-set-of? (+ term?))
       (term? lex-coord? (+ term?))
       ;; Reified
       (noun-reifier? noun?)
@@ -98,6 +102,8 @@
       (np+preds term? (+ pred?))
       ;; Object quoted expression.
       (|"| _+ |"|) ; same as (\" .. \"), but breaks the syntax highlighting less.
+
+      ;; FALL BACK ANALYSIS.
       ;; Fall back if np+preds arguments not analyzed correctly.
       (np+preds _+)
       ((_!1 's) _!2)
@@ -107,11 +113,11 @@
       (verb-reifier? _+)
       (sent-reifier? _+)
       (tensed-sent-reifier? _+)
-      ;; Fall back on determiners and set-of.
-      (set-of _+)
+      ;; Fall back on determiners and set-of generating terms..
+      (lex-set-of? _+)
       (det? _+)
 
-      ;; Rather than building a whole set of types corresponding to versions 
+      ;; Rather than building a whole set of types corresponding to versions
       ;; with the hole contained, I'll just check it dynamically.
       [*]h
       [*]s))
@@ -125,7 +131,8 @@
        (aux? verb?)
        (verb? adv-a? term?)
        ((? verb?) lex-coord? (+ verb?))
-       
+
+       ;; FALL BACK ANALYSIS.
        ;; Fall back if arguments not analyzed correctly.
        (verb? _!)
        ))
@@ -135,6 +142,7 @@
        (lex-rel? pred?)
        (sub lex-rel? sent?)
 
+       ;; FALL BACK ANALYSIS.
        ;; Fall back on arguments not analyzed correctly.
        (lex-rel? _!)
        (sub lex-rel? _!)
@@ -164,19 +172,22 @@
       (sent-mod? sent?)    ; sentence modifier, sentence
       (sent? sent-mod?)    ; sentence, sentence modifier
       (adv-a? term? verb?) ; action adverb, subject, verb
-      (sent? sent-punct?)  ; sentence with punctuation 
-      (term? = term?)))    ; equality
+      (sent? sent-punct?)  ; sentence with punctuation
+      (term? = term?)      ; equality
+      (term? adj?)         ; not correct on the surface, but correct logically
+      (term? noun?)        ; not correct on the surface, but correct logically
+      ))
 
 (defparameter *ttt-tensed-sent*
   '(! ;; Simple sentence.
       (term? tensed-verb?)
       ;; Coordinated sentence.
       (tensed-sent? lex-coord? (+ tensed-sent?))
-      ;; Modified sentence (e.g. curried coordination). 
+      ;; Modified sentence (e.g. curried coordination).
       (sent-mod? tensed-sent?)
       ;; Postfixed sentence modification.
       (tensed-sent? sent-mod?)
-      ;; Backwards sentence... 
+      ;; Backwards sentence...
       (tensed-verb? adv-a? term?)
       ;; Punctuated sentence.
       (tensed-sent? sent-punct?)
@@ -199,8 +210,9 @@
       ))
 
 (defparameter *ttt-sent-mod*
-  '(!1 
-      (lex-coord? (!2 tensed-sent? sent?))))
+  '(!1 (lex-coord? (!2 tensed-sent? sent?))
+       ;; Prepositionally coordinated sentences.
+       (lex-ps? tensed-sent?)))
 
 (defparameter *ttt-preposs-macro*
   '(term? 's))
@@ -273,6 +285,10 @@
         (list #'advformer? 'advformer)
         (list #'detformer? 'detformer)
         (list #'preposs-macro? 'preposs-macro)
+        ;; Purely lexical types.
+        (list #'lex-equal? 'equal-sign)
+        (list #'lex-set-of? 'set-of-op)
+        (list #'lex-macro? 'macro-symbol)
         ))
 
 ;; Hypothesizes the type of the given ULF formula.
@@ -283,11 +299,14 @@
       (mapcar #'second matched)
       '(unknown))))
 
+(defun unknown? (x)
+  (equal '(unknown) (ulf-type? x)))
+
 ;; Labels formula with the hypothesized types.
 ;; TODO: Merging this function with 'ulf-type?' to get all types in one bottom
 ;;       up fashion would speed this up a lot.
 (defun label-formula-types (f)
-  (cond 
+  (cond
     ((atom f) f)
       ;(list (cons 'types (ulf-type? f)) f))
     (t (list (cons 'types (ulf-type? f)) (mapcar #'label-formula-types f)))))

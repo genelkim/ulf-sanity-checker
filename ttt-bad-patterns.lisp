@@ -2,10 +2,10 @@
 
 (defparameter *ttt-bad-det*
   '(!1 (det? _! _+)
-      (det? (! ~ noun?))
+      (det? (! ~ noun? pp?))
       (_+ det? _*)))
 (defparameter *bad-det-msg* 
-  "Determiners take 1 nominal (noun) argument.")
+  "Determiners take 1 nominal (noun) or, rarely, prepositional argument.")
 
 (defparameter *ttt-bad-prep*
   '(!1 (lex-p? _! _+)

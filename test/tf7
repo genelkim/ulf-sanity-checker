@@ -1,0 +1,17 @@
+((sub (What.d part.n) 
+ ((past do.aux-s) 
+  (k (|U.S.| (plur warning.n))) 
+  ((play.v *h) 
+   (in.p-arg 
+    (((the.d major.n) 's) 
+	 (unwillingness.a 
+	  (to ((pull.v (the.d trigger.n)) 
+		   (adv-e (sub (at-time.p which.rel) 
+                   	   ((he.pro 
+                         (((((past have.v) |General Noriega|) (in.p-arg (k custody.n)))  
+                           but.cc 
+                           ((past be.v) 
+                            (under.p (k (attack.n 
+                                         (by.p-arg 
+                                          (k ((pro.p |Noriega|) (plur troop.n))))))))) 
+                          (adv-e *h)))))))))))))) ?)

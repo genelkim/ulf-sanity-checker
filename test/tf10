@@ -1,0 +1,10 @@
+(((adv-s (For.p (k example.n))) 
+ (sub what.pro 
+      (exactly.adv-s 
+       ((past do.aux-s) (the.d |CIA|.n) 
+      ((tell.v (set-of |Major Giroldi| (his.d (fellow.a (coup.n (plur plotter.n))))))
+         (np+preds *h
+             (about.p 
+                    (set-of (k (|U.S.| (plur law.n)))  
+                        (k (n+preds (executive.a (plur order.n)) 
+                                    (on.p (k (plur assassination.n))))))))))))) ?)

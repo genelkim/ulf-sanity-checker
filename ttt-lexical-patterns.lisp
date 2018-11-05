@@ -4,9 +4,9 @@
 (defparameter *coordinator* '(and or but because))
 (defparameter *detformer* '(nquan fquan))
 
-;; Check if *x* has the *suffix* extension. 
+;; Check if *x* has the *suffix* extension.
 (defun suffix-check (x suffix)
-  (match-re (concatenate 'string "^\(\\w\|\\d\|-\)\+\\." suffix "$") 
+  (match-re (concatenate 'string "^\(\\w\|\\d\|-\|\/\)\+\\." suffix "$")
             (format nil "~s" x)))
 
 (defun lex-noun? (x)
@@ -16,7 +16,7 @@
   (suffix-check x "F"))
 
 (defun lex-pronoun? (x)
-  (suffix-check x "PRO")) 
+  (suffix-check x "PRO"))
 
 (defun lex-verb? (x)
   (suffix-check x "V"))
@@ -28,7 +28,7 @@
   (suffix-check x "P"))
 
 (defun lex-p-arg? (x)
-  (match-re (concatenate 'string "^\(\\w\|\\d\|-\)\+.P\\-ARG$") 
+  (match-re (concatenate 'string "^\(\\w\|\\d\|-\)\+.P\\-ARG$")
             (format nil "~s" x)))
 
 (defun lex-ps? (x)
@@ -59,7 +59,7 @@
 (defun lex-aux-v? (x)
   (suffix-check x "AUX-V"))
 (defun lex-aux? (x)
-  (or 
+  (or
     (lex-aux-s? x)
     (lex-aux-v? x)))
 
@@ -93,7 +93,7 @@
     (lex-adv-e? x)
     (lex-adv-f? x)))
 (defun lex-adv? (x)
-  (or 
+  (or
     (lex-adv-a? x)
     (lex-adv-s? x)
     (lex-adv-e? x)

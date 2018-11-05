@@ -244,7 +244,7 @@
      ((tensed-aux? verb?) (* adv-a?) term?)
      (((* adv-a?) (aux? verb?) (* adv-a?)) term?)))
 (defparameter *bad-aux-before-arg-msg*
-  "The auxiliary should be applied after all non-subject arguments.")
+  "The auxiliary should be applied after all non-subject arguments. You can IGNORE this message if this is occurring within it-extra.pro.")
 
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt:match-expr *ttt-bad-det* x))
@@ -277,10 +277,10 @@
        (sent? x)
        (not (tensed-sent? x))))
 (defun conservative-bad-sent-reifier? (x)
-  (ttt:match-expr *ttt-conservative-bad-sent-reifier*))
-(defun bad-noun-pp? (x) (ttt:match-expr *ttt-bad-noun-pp*))
-(defun bad-verb-sent? (x) (ttt:match-expr *ttt-bad-verb-sent*))
-(defun bad-aux-before-arg? (x) (ttt:match-expr *ttt-bad-aux-before-arg*))
+  (ttt:match-expr *ttt-conservative-bad-sent-reifier* x))
+(defun bad-noun-pp? (x) (ttt:match-expr *ttt-bad-noun-pp* x))
+(defun bad-verb-sent? (x) (ttt:match-expr *ttt-bad-verb-sent* x))
+(defun bad-aux-before-arg? (x) (ttt:match-expr *ttt-bad-aux-before-arg* x))
 
 (defparameter *bad-pattern-test-pairs*
   (list

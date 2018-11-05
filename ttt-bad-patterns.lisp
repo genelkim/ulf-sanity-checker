@@ -2,7 +2,9 @@
 
 (defparameter *ttt-bad-det*
   '(!1 (det? _! _+)
-      (det? (! ~ noun? pp?))
+      ;; The only things that can be arguments to determiners are nouns,
+      ;; rarely prepositions, and typeless predicates (e.g. (= ..)).
+      (det? (! ~ noun? pp? (= _!)))
       (_+ det? _*)))
 (defparameter *bad-det-msg* 
   "Determiners take 1 nominal (noun) or, rarely, prepositional argument.")

@@ -197,6 +197,9 @@
 (defparameter *bad-qt-attr-msg*
   "'qt-attr' operator should take one argument and it should contain a '*qt'")
 
+(defparameter *bad-rel-sent-msg*
+  "A relativizer (*.rel) must sit inside of a tensed sentence.")
+
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt:match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt:match-expr *ttt-bad-prep* x))
@@ -223,6 +226,10 @@
 (defun bad-rep? (x) (ttt:match-expr *ttt-bad-rep* x))
 (defun bad-qt-attr? (x) (ttt:match-expr *ttt-bad-qt-attr* x))
 (defun bad-equal? (x) (ttt:match-expr *ttt-bad-equal* x))
+(defun bad-rel-sent? (x)
+  (and (contains-relativizer x)
+       (sent? x)
+       (not (tensed-sent? x))))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -256,5 +263,6 @@
     (list #'bad-sub? *bad-sub-msg*)
     (list #'bad-rep? *bad-rep-msg*)
     (list #'bad-qt-attr? *bad-qt-attr-msg*)
+    (list #'bad-rel-sent? *bad-rel-sent-msg*)
     ))
 

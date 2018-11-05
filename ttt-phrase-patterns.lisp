@@ -1,9 +1,6 @@
 
 (load "ttt-lexical-patterns")
 
-(defparameter *record-types*
-  '(date-time currency us_addr))
-
 (defparameter *ttt-noun*
   '(! lex-noun?
       lex-name-pred?
@@ -58,12 +55,12 @@
 (defparameter *ttt-adv-s*
    '(! lex-adv-s?
       (adv-s pred?)
-      (adv-s? lex-coord? adv-s?)))
+      (adv-s? lex-coord? (+ adv-s?))))
 
 (defparameter *ttt-adv-f*
    '(! lex-adv-f?
       (adv-f pred?)
-      (adv-f? lex-coord? adv-f?)
+      (adv-f? lex-coord? (+ adv-f?))
       ))
 
 ;; Prepositional Phrase.
@@ -120,33 +117,46 @@
       ;; Rather than building a whole set of types corresponding to versions
       ;; with the hole contained, I'll just check it dynamically.
       [*]h
-      [*]s))
+      [*]s
+      [*]p
+      [*]qt
+      [*]ref))
 
 (defparameter *ttt-verb*
-   '(! lex-verb?
-       (pasv lex-verb?)
-       (verb? (+ (! term? pred?)))
-       (adv-a? verb?)
-       (verb? (+ adv-a?))
-       (aux? verb?)
-       (verb? adv-a? term?)
-       ((? verb?) lex-coord? (+ verb?))
+  '(! lex-verb?
+      (pasv lex-verb?)
+      (verb? (+ (! term? pred?)))
+      (adv-a? verb?)
+      (verb? (+ adv-a?))
+      (aux? verb?)
+      (verb? adv-a? term?)
+      ((? verb?) lex-coord? (+ verb?))
 
-       ;; FALL BACK ANALYSIS.
-       ;; Fall back if arguments not analyzed correctly.
-       (verb? _!)
-       ))
+      ;; FALL BACK ANALYSIS.
+      ;; Fall back if arguments not analyzed correctly.
+      (verb? _!)
+      ))
+
+(defun contains-relativizer (x)
+  (ttt:match-expr '(^* lex-rel?) x))
+;; A relativized sentence is a tensed sentence with a relativizer in it.
+(defun relativized-sent? (x)
+  (and (tensed-sent? x)
+       (contains-relativizer x)))
 
 (defparameter *ttt-pred*
-   '(! verb? noun? adj? tensed-verb? pp?
-       (lex-rel? pred?)
-       (sub lex-rel? sent?)
+  '(! verb? noun? adj? tensed-verb? pp?
+      (lex-rel? pred?)
+      (sub lex-rel? tensed-sent?)
+      (sub (^* lex-rel?) tensed-sent?)
+      relativized-sent?
 
-       ;; FALL BACK ANALYSIS.
-       ;; Fall back on arguments not analyzed correctly.
-       (lex-rel? _!)
-       (sub lex-rel? _!)
-       ))
+      ;; FALL BACK ANALYSIS.
+      ;; Fall back on arguments not analyzed correctly.
+      (lex-rel? _!)
+      (sub lex-rel? _!)
+      (sub (^* lex-rel?) _!)
+      ))
 
 (defparameter *ttt-aux*
   '(! lex-aux? perf prog))
@@ -160,7 +170,9 @@
       (tensed-aux? verb?)
       (adv-a? tensed-verb?)
       (tensed-verb? (+ adv-a?))
-      (tensed-verb? adv-a? term?)))
+      (tensed-verb? adv-a? term?)
+      ((? tensed-verb?) lex-coord? (+ tensed-verb?))
+      ))
 
 (defparameter *ttt-det*
   '(! lex-det?
@@ -238,7 +250,6 @@
 
 (defun preposs-macro? (x) (ttt:match-expr *ttt-preposs-macro* x))
 
-(defun record-type? (x) (member x *record-types*))
 (defun sent-punct? (x)
   (member x '(! ? .?)))
 
@@ -285,6 +296,7 @@
         (list #'advformer? 'advformer)
         (list #'detformer? 'detformer)
         (list #'preposs-macro? 'preposs-macro)
+        (list #'relativized-sent? 'rel-sent)
         ;; Purely lexical types.
         (list #'lex-equal? 'equal-sign)
         (list #'lex-set-of? 'set-of-op)

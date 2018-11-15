@@ -10,7 +10,7 @@
     ((and (atom ulf) (eq '*h ulf)) t)
     ((atom ulf) nil)
     (t (or (contains-hole (car ulf))
-           (contains-hold (cdr ulf))))))
+           (contains-hole (cdr ulf))))))
 
 ;;; Applies all the sub macros in the given ULF.
 ;;; Returns a pair of values (success, results)

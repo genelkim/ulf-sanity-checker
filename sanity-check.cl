@@ -12,7 +12,12 @@
   (format t "    o  formula in quotes~%")
   (exit))
 
-(load "init")
+;; For some reason the AWS lisp isn't loading Quicklisp automatically in this
+;; script.
+(load "~/quicklisp/setup")
+
+(load "load")
+(in-package :ulf-sanity-checker)
 
 (let* ((use-stdin nil)
        (fh (if use-stdin *standard-output*

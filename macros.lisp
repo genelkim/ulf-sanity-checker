@@ -2,7 +2,7 @@
 ;;;
 ;;; Macro expansions that are necessary for the sanity checker.
 
-
+(in-package :ulf-sanity-checker)
 
 ;;; Returns t if 'ulf' contains *h, nil otherwise.
 (defun contains-hole (ulf)
@@ -10,7 +10,7 @@
     ((and (atom ulf) (eq '*h ulf)) t)
     ((atom ulf) nil)
     (t (or (contains-hole (car ulf))
-           (contains-hold (cdr ulf))))))
+           (contains-hole (cdr ulf))))))
 
 ;;; Applies all the sub macros in the given ULF.
 ;;; Returns a pair of values (success, results)
@@ -98,7 +98,7 @@
 ;;;   (((past make.v) he.pro (a.d table.n) (for.p-arg |John|)) ?)
 (defun uninvert-verbaux! (ulf)
   (if (< (length ulf) 3)
-    (return-from 'uninvert-verbaux! nil))
+    (return-from uninvert-verbaux! nil))
   (let ((headva (first ulf))
         (np (second ulf))
         (vp (third ulf))

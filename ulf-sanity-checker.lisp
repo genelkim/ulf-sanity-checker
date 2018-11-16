@@ -45,6 +45,9 @@
 ; - try to align words between ULF and sentence (ask if omitted/extra ones are necessary).
 ; - run sub/rep since they are type-general (too much work to add into the type system).
 
+(in-package :ulf-sanity-checker)
+
+;; TODO: use util for this.
 ;; Returns a list of lst with cndn filter out followed by lst with only cndn.
 (defun split-by-cond (lst cndn)
   (list (remove-if cndn lst)
@@ -151,7 +154,7 @@
 
      ;; Extracts vocatives.
      (extract-vocs (f)
-       (extract-category f #'voc? #'(lambda (x) nil)))
+       (extract-category f #'voc? #'(lambda (x) (declare (ignore x)) nil)))
 
      ;; Removes double parens.
      (remove-extra-parens
@@ -175,21 +178,21 @@
            (paren-remvd-main-sent (remove-extra-parens main-sent))
            (uninv (uninvert-verbauxes paren-remvd-main-sent))
            (regrouped (list uninv sent-ops vocs)))
-      (format t "sent-op-pair ~s~%~%" sent-op-pair)
-      (format t "voc-pair ~s~%~%" voc-pair)
-      (format t "main-sent ~s~%~%" main-sent)
-      (format t "paren-remvd-main-sent ~s~%~%" paren-remvd-main-sent)
-      (format t "uninv ~s~%~%" uninv)
+      ;(format t "sent-op-pair ~s~%~%" sent-op-pair)
+      ;(format t "voc-pair ~s~%~%" voc-pair)
+      ;(format t "main-sent ~s~%~%" main-sent)
+      ;(format t "paren-remvd-main-sent ~s~%~%" paren-remvd-main-sent)
+      ;(format t "uninv ~s~%~%" uninv)
       regrouped)))
 
 
 ;; Recursively check for bad patterns on formula f.
 ;; pattern-test-pairs is a list of pairs of functions and corresponding
-;;  messages.  The functinos are evaluated and if t, the message is returned.
+;; messages.  The functions are evaluated and if t, the message is returned.
 ;; Returns a list of pairs with user display information.
 ;; 1. pattern that failed a test.
 ;; 2. a list of messages about conditions for failed phenomena.
-(defun bad-pattern-check (f pattern-test-pairs &optional top)
+(defun bad-pattern-check (f pattern-test-pairs)
   (labels 
     (
      ;; Evaluates a formula fragment ons a simple test/msg pair.
@@ -226,7 +229,7 @@
   (let* ((rawpatternres
              (bad-pattern-check 
                (hide-ttt-ops f) 
-               *raw-bad-pattern-test-pairs* t))
+               *raw-bad-pattern-test-pairs*))
          (preprocd (preprocess f))
          (linesep (format nil "************************************~%"))
          (patternres 

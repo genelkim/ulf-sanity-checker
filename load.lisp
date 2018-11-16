@@ -1,6 +1,12 @@
-;; ASDF system definition for TTT
+;; ASDF system definition for ULF Sanity Checker.
 ;; Original version of this file written for Epilog.
 (require 'asdf)
+
+;; Try to be quiet.
+(setf (sys:gsgc-switch :print) nil)
+(setf (sys:gsgc-switch :stats) nil)
+(setf (sys:gsgc-switch :verbose) nil)
+(defvar *asdf-verbose* nil)
 
 ;; avoids saving compiled files in special local cache.
 (let f (and (setq f (fboundp (find-symbol "DISABLE-OUTPUT-TRANSLATIONS" 'asdf)))
@@ -22,17 +28,21 @@
      (asdf:perform (make-instance 'asdf:compile-op) c)
      (call-next-method))))
 
+;(asdf:initialize-source-registry
+;  `(:source-registry
+;      :ignore-inherited-configuration
+;      (:tree ,(namestring (merge-pathnames "./")))))
+
 ;; Adds the directory containing load.lisp to the "PATH" of asdf, so
-;; we can load EPILOG2 from any directory.
+;; we can load *ulf-sanity-checker* from any directory.
 (push (make-pathname :directory (pathname-directory *load-truename*))
       asdf:*central-registry*)
 
-;; compiler settings
-(proclaim '(optimize (speed 3) (safety 3) (space 0) (debug 3)))
+;; Be quick.
+(proclaim '(optimize (speed 1) (safety 2) (space 3) (debug 0)))
 
-;; Load TTT Choose between the following two lines depending on
+;; Choose between the following two lines depending on
 ;; whether you want the files compiled into FASLs or not:
-(asdf:operate 'asdf:load-op 'ttt) ;; Compile and load as necessary
-;(asdf:operate 'asdf:load-source-op 'ttt) ;; Doesn't compile
-
+(asdf:operate 'asdf:load-op 'ulf-sanity-checker) ;; Compile and load as necessary
+;(asdf:operate 'asdf:load-source-op 'ulf-sanity-checker) ;; Doesn't compile
 

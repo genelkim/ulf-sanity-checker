@@ -1,12 +1,14 @@
 ;; ULF lexical patterns identified in TTT.
 
+(in-package :ulf-sanity-checker)
+
 (defparameter *tense* '(past pres cf))
 (defparameter *coordinator* '(and or but because))
 (defparameter *detformer* '(nquan fquan))
 
 ;; Check if *x* has the *suffix* extension.
 (defun suffix-check (x suffix)
-  (match-re (concatenate 'string "^\(\\w\|\\d\|-\|\/\|\\.\)\+\\." suffix "$")
+  (cl-user::match-re (concatenate 'string "^\(\\w\|\\d\|-\|\/\|\\.\)\+\\." suffix "$")
             (format nil "~s" x)))
 
 (defun lex-noun? (x)
@@ -28,7 +30,7 @@
   (suffix-check x "P"))
 
 (defun lex-p-arg? (x)
-  (match-re (concatenate 'string "^\(\\w\|\\d\|-\)\+.P\\-ARG$")
+  (cl-user::match-re (concatenate 'string "^\(\\w\|\\d\|-\)\+.P\\-ARG$")
             (format nil "~s" x)))
 
 (defun lex-ps? (x)
@@ -68,12 +70,12 @@
 
 ;; Matches a name predicate.
 (defun lex-name-pred? (x)
-  (match-re "^\\|\[\^\\|\]\+\\.N\\|$" (format nil "~s" x)))
+  (cl-user::match-re "^\\|\[\^\\|\]\+\\.N\\|$" (format nil "~s" x)))
 
 ;; Matches a regular name.
 (defun lex-name? (x)
   (and
-    (match-re "^\\|\[\^\\|\]\+\\|$" (format nil "~s" x))
+    (cl-user::match-re "^\\|\[\^\\|\]\+\\|$" (format nil "~s" x))
     (not (lex-name-pred? x))
     ;; Special handling of quotes '\" == '|"|.
     (not (eq '\" x))))

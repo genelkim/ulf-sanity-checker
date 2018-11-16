@@ -1,5 +1,5 @@
 
-(load "ttt-lexical-patterns")
+(in-package :ulf-sanity-checker)
 
 (defparameter *ttt-noun*
   '(! lex-noun?
@@ -144,7 +144,7 @@
       ))
 
 (defun contains-relativizer (x)
-  (ttt:match-expr '(^* lex-rel?) x))
+  (ttt::match-expr '(^* lex-rel?) x))
 ;; A relativized sentence is a tensed sentence with a relativizer in it.
 (defun relativized-sent? (x)
   (and (tensed-sent? x)
@@ -241,28 +241,28 @@
      ;; FALL BACK.
      (voc _!) (voc-O _1)))
 
-(defun noun? (x) (ttt:match-expr *ttt-noun* x))
-(defun adj? (x) (ttt:match-expr *ttt-adj* x))
-(defun adv-a? (x) (ttt:match-expr *ttt-adv-a* x))
-(defun adv-e? (x) (ttt:match-expr *ttt-adv-e* x))
-(defun adv-s? (x) (ttt:match-expr *ttt-adv-s* x))
-(defun adv-f? (x) (ttt:match-expr *ttt-adv-f* x))
+(defun noun? (x) (ttt::match-expr *ttt-noun* x))
+(defun adj? (x) (ttt::match-expr *ttt-adj* x))
+(defun adv-a? (x) (ttt::match-expr *ttt-adv-a* x))
+(defun adv-e? (x) (ttt::match-expr *ttt-adv-e* x))
+(defun adv-s? (x) (ttt::match-expr *ttt-adv-s* x))
+(defun adv-f? (x) (ttt::match-expr *ttt-adv-f* x))
 (defun adv? (x) (or (adv-a? x) (adv-e? x) (adv-s? x) (adv-f? x)))
-(defun pp? (x) (ttt:match-expr *ttt-pp* x))
-(defun term? (x) (ttt:match-expr *ttt-term* x))
-(defun verb? (x) (ttt:match-expr *ttt-verb* x))
-(defun pred? (x) (ttt:match-expr *ttt-pred* x))
-(defun det? (x) (ttt:match-expr *ttt-det* x))
-(defun aux? (x) (ttt:match-expr *ttt-aux* x))
-(defun tensed-aux? (x) (ttt:match-expr *ttt-tensed-aux* x))
-(defun tensed-verb? (x) (ttt:match-expr *ttt-tensed-verb* x))
-(defun sent? (x) (ttt:match-expr *ttt-sent* x))
-(defun tensed-sent? (x) (ttt:match-expr *ttt-tensed-sent* x))
-(defun sent-mod? (x) (ttt:match-expr *ttt-sent-mod* x))
+(defun pp? (x) (ttt::match-expr *ttt-pp* x))
+(defun term? (x) (ttt::match-expr *ttt-term* x))
+(defun verb? (x) (ttt::match-expr *ttt-verb* x))
+(defun pred? (x) (ttt::match-expr *ttt-pred* x))
+(defun det? (x) (ttt::match-expr *ttt-det* x))
+(defun aux? (x) (ttt::match-expr *ttt-aux* x))
+(defun tensed-aux? (x) (ttt::match-expr *ttt-tensed-aux* x))
+(defun tensed-verb? (x) (ttt::match-expr *ttt-tensed-verb* x))
+(defun sent? (x) (ttt::match-expr *ttt-sent* x))
+(defun tensed-sent? (x) (ttt::match-expr *ttt-tensed-sent* x))
+(defun sent-mod? (x) (ttt::match-expr *ttt-sent-mod* x))
 
-(defun preposs-macro? (x) (ttt:match-expr *ttt-preposs-macro* x))
-(defun p-arg? (x) (ttt:match-expr *ttt-p-arg* x))
-(defun voc? (x) (ttt:match-expr *ttt-voc* x))
+(defun preposs-macro? (x) (ttt::match-expr *ttt-preposs-macro* x))
+(defun p-arg? (x) (ttt::match-expr *ttt-p-arg* x))
+(defun voc? (x) (ttt::match-expr *ttt-voc* x))
 
 (defun sent-punct? (x)
   (member x '(! ? .?)))

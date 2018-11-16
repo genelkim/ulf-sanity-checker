@@ -13,6 +13,5 @@
 
 (load "macros")
 
-(load "ulf_sanity_checker")
-
+(load "ulf-sanity-checker")
 

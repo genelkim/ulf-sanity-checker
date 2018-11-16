@@ -12,7 +12,8 @@
   (format t "    o  formula in quotes~%")
   (exit))
 
-(load "init")
+(load "load")
+(in-package :ulf-sanity-checker)
 
 (let* ((use-stdin nil)
        (fh (if use-stdin *standard-output*

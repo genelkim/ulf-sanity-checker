@@ -1,7 +1,7 @@
-#! /p/lisp/acl/linux/latest/alisp -#!
-; ABOVE: for running in cs.rochester.edu
-;#! /home/ec2-user/acl10.1express/alisp -#!
+#! /home/ec2-user/acl10.1express/alisp -#!
 ; ABOVE: for running in AWS.
+;#! /p/lisp/acl/linux/latest/alisp -#!
+; ABOVE: for running in cs.rochester.edu
 ;; AUTHOR: Gene Kim  <gkim21@cs.rochester.edu>
 ;; Works for Allegro Lisp, other Lisps may need a different first #! sequence
 ;; Should eventually make this portable across Lisp implementations.

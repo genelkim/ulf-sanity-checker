@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-CHECKER_DIR="../ulf_sanity_checker"
+CHECKER_DIR="../ulf_sanity_checker_v2.0"
 
 CURDIR=$(pwd)
 

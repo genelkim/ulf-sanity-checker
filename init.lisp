@@ -7,11 +7,7 @@
 ;; e.g. noun? : *.n
 ;;      adj?  : *.a
 ;;      v?    : *.v
-(load "ttt-lexical-patterns")
-(load "ttt-phrase-patterns")
 (load "ttt-bad-patterns")
-
-(load "macros")
 
 (load "ulf-sanity-checker")
 

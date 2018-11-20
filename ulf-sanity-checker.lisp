@@ -47,88 +47,6 @@
 
 (in-package :ulf-sanity-checker)
 
-;; Condition to check if an element is a filitered sentence-level operator.
-;; Basically all sentence-level operators that are written as phrasal in the
-;; surface form.
-(defun phrasal-sent-op? (e)
-  (or
-    (adv-e? e)
-    (adv-s? e)
-    (adv-f? e)
-    (member e '(not not.adv-e not.adv-s))))
-
-(defun hide-ttt-ops (wff); tested
-;~~~~~~~~~~~~~~~~~~~~~~~~
-; Wrap [..] around symbols like !, +, ?, *, @, ~, {}, or <>, or
-; ones starting this way, which we may want to use in some patterns
-; (e.g., in wff-patterns involving *, **, @, or ~), but can't 
-; because of their special meanings in TTT. We're assuming that
-; the wffs we want to process don't *already* contain symbols in
-; square brackets, starting as above inside the brackets, and which
-; shouldn't have the brackets removed when we ultimately "unhide"
-; the hidden symbols in a formula.
-;
-  (let (str chars)
-       (cond ((symbolp wff)
-              (setq str (string wff))
-              (setq chars (coerce str 'list))
-              (cond ((member (car chars) '(#\! #\+ #\? #\* #\@ #\~))
-                     (intern (concatenate 'string "[" str "]")))
-                    ((and (eq (car chars) #\{) (eq (second chars) #\}))
-                     (intern (concatenate 'string "[" str "]")))
-                    ((and (eq (car chars) #\<) (eq (second chars) #\>))
-                     (intern (concatenate 'string "[" str "]")))
-                    (t wff)))
-             ((atom wff) wff)
-             (t (cons (hide-ttt-ops (car wff)) (hide-ttt-ops (cdr wff)))))
- )); end of hide-ttt-ops
-
-
-(defun unhide-ttt-ops (wff); tested
-;~~~~~~~~~~~~~~~~~~~~~~~~~~
-; Remove the square brackets that have been added around ttt symbols
-; in wff by 'hide-ttt-ops':
-;
- (let (str chars)
-      (cond ((symbolp wff)
-             (setq str (string wff))
-             (setq chars (coerce str 'list))
-             (cond ((or (not (eq (car chars) #\[))
-                        (not (eq (car (last chars)) #\]))) wff)
-                   (t (setq chars (cdr (butlast chars)))
-                      (setq str (coerce chars 'string))
-                      (cond ((null chars) wff)
-                            ((member (car chars) '(#\! #\+ #\? #\* #\@ #\~))
-                             (intern str))
-                            ((and (eq (car chars) #\{) (eq (second chars) #\}))
-                             (intern str))
-                            ((and (eq (car chars) #\<) (eq (second chars) #\>))
-                             (intern str))
-                            (t wff)))))
-            ((atom wff) wff)
-            (t (cons (unhide-ttt-ops (car wff)) (unhide-ttt-ops (cdr wff)))))
- )); end of unhide-ttt-ops
-
-
-;; Walks through the formula f and extracts out categories that satisfy catfn.
-;; Formula constituents that satisfy ign-cnd-fn are ignored, so elements 
-;; satisfying catfn directly within them are ignored.
-(defun extract-category (f catfn ign-cnd-fn)
-  (if (atom f) (list f '())
-    (let* ((split 
-             ;; Only filter out sentence ops if there are at least two
-             ;; elements.  If there are two, then we treat sentence 
-             ;; operators as locally applied.
-             (if (funcall ign-cnd-fn f)
-               (list f nil)
-               (util:split-by-cond f catfn)))
-           (no-sent-ops (first split))
-           (sent-ops (second split))
-           (recursed (mapcar #'(lambda (x) 
-                                 (extract-category x catfn ign-cnd-fn)) 
-                             no-sent-ops)))
-      (list (mapcar #'first recursed)
-            (apply #'append (cons sent-ops (mapcar #'second recursed)))))))
 
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
@@ -143,12 +61,13 @@
      ; Returns (sent-op-filtered-f, list-of-sent-ops)
      (extract-sent-ops
        (f)
-       (extract-category f #'phrasal-sent-op? 
-                         #'(lambda (x) (<= (length x) 2))))
+       (util:extract-category f #'phrasal-sent-op?
+                              #'(lambda (x) (<= (length x) 2))))
 
      ;; Extracts vocatives.
      (extract-vocs (f)
-       (extract-category f #'voc? #'(lambda (x) (declare (ignore x)) nil)))
+       (util:extract-category f #'voc?
+                              #'(lambda (x) (declare (ignore x)) nil)))
 
      ;; Removes double parens.
      (remove-extra-parens
@@ -161,16 +80,16 @@
     
     ;; Main body, run the preprocessing functions.
     (let* ((subres (multiple-value-list
-                     (apply-sub-macro f)))
+                     (ulf:apply-sub-macro f)))
            (subf (second subres))
-           (adv-a-lifted (lift-adv-a subf))
+           (adv-a-lifted (ulf:lift-adv-a subf))
            (sent-op-pair (extract-sent-ops adv-a-lifted))
            (voc-pair (extract-vocs sent-op-pair))
            (main-sent (first (first voc-pair)))
            (sent-ops (second (first voc-pair)))
            (vocs (second voc-pair))
            (paren-remvd-main-sent (remove-extra-parens main-sent))
-           (uninv (uninvert-verbauxes paren-remvd-main-sent))
+           (uninv (ulf:uninvert-verbauxes paren-remvd-main-sent))
            (regrouped (list uninv sent-ops vocs)))
       ;(format t "sent-op-pair ~s~%~%" sent-op-pair)
       ;(format t "voc-pair ~s~%~%" voc-pair)
@@ -222,7 +141,7 @@
 (defun sanity-check (f)
   (let* ((rawpatternres
              (bad-pattern-check 
-               (hide-ttt-ops f) 
+               (util:hide-ttt-ops f)
                *raw-bad-pattern-test-pairs*))
          (preprocd (preprocess f))
          (linesep (format nil "************************************~%"))

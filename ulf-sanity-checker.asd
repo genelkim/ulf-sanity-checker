@@ -5,7 +5,7 @@
   :name "ulf-sanity-checker"
   :version "0.3.0"
   :author "Gene Louis Kim"
-  :depends-on (:ttt)
+  :depends-on (:ttt :util)
   :components ((:file "package")
                (:file "ttt-lexical-patterns")
                (:file "ttt-phrase-patterns")

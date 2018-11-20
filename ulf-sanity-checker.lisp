@@ -47,12 +47,6 @@
 
 (in-package :ulf-sanity-checker)
 
-;; TODO: use util for this.
-;; Returns a list of lst with cndn filter out followed by lst with only cndn.
-(defun split-by-cond (lst cndn)
-  (list (remove-if cndn lst)
-        (remove-if-not cndn lst)))
-
 ;; Condition to check if an element is a filitered sentence-level operator.
 ;; Basically all sentence-level operators that are written as phrasal in the
 ;; surface form.
@@ -127,7 +121,7 @@
              ;; operators as locally applied.
              (if (funcall ign-cnd-fn f)
                (list f nil)
-               (split-by-cond f catfn)))
+               (util:split-by-cond f catfn)))
            (no-sent-ops (first split))
            (sent-ops (second split))
            (recursed (mapcar #'(lambda (x) 

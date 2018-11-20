@@ -4,6 +4,6 @@
 (in-package :cl-user)
 
 (defpackage :ulf-sanity-checker
-  (:use :cl :ttt)
+  (:use :cl :ttt :util)
   (:export sanity-check))
 

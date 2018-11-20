@@ -291,7 +291,7 @@
   "Suspicious: 'will.aux-v' is only used when 'will.aux-s' doesn't make sense and 'will' is used for emphasis.")
 
 (defparameter *ttt-bad-name-decomp*
-  '(+ lex-name? lex-name-pred?))
+  '(_*1 (! lex-name? lex-name-pred?) (! lex-name? lex-name-pred?) _*2))
 (defparameter *bad-name-decomp-msg*
   "Names and name predicates should only be broken down on prepositions.")
 

@@ -1,7 +1,7 @@
-#! /home/ec2-user/acl10.1express/alisp -#!
-; ABOVE: for running in AWS.
-;#! /p/lisp/acl/linux/latest/alisp -#!
+#! /p/lisp/acl/linux/latest/alisp -#!
 ; ABOVE: for running in cs.rochester.edu
+;#! /home/ec2-user/acl10.1express/alisp -#!
+; ABOVE: for running in AWS.
 ;; AUTHOR: Gene Kim  <gkim21@cs.rochester.edu>
 ;; Works for Allegro Lisp, other Lisps may need a different first #! sequence
 ;; Should eventually make this portable across Lisp implementations.
@@ -15,6 +15,8 @@
 ;; For some reason the AWS lisp isn't loading Quicklisp automatically in this
 ;; script.
 (load "~/quicklisp/setup")
+(ql:quickload :util :silent t)
+(ql:quickload :ulf-lib :silent t)
 
 (load "load")
 (in-package :ulf-sanity-checker)

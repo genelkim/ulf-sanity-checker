@@ -12,6 +12,9 @@
 (let f (and (setq f (fboundp (find-symbol "DISABLE-OUTPUT-TRANSLATIONS" 'asdf)))
 	    (funcall f)))
 
+;; Suppress warnings.
+(handler-bind ((excl::warning
+                 #'(lambda (c) (declare (ignore c)) (muffle-warning)))))
 ;; from http://www.cliki.net/asdf
 ;;; If the fasl was stale, try to recompile and load (once). Since only SBCL
 ;;; has a separate condition for bogus fasls we retry on any old error
@@ -41,6 +44,9 @@
 ;; Be quick.
 (proclaim '(optimize (speed 1) (safety 2) (space 3) (debug 0)))
 
+;; Suppress warnings.
+(handler-bind ((excl::warning
+                 #'(lambda (c) (declare (ignore c)) (muffle-warning)))))
 ;; Choose between the following two lines depending on
 ;; whether you want the files compiled into FASLs or not:
 (asdf:operate 'asdf:load-op 'ulf-sanity-checker) ;; Compile and load as necessary

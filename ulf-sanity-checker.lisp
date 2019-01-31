@@ -47,6 +47,7 @@
 
 (in-package :ulf-sanity-checker)
 
+(rename-package :alexandria :alxdr)
 
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
@@ -150,6 +151,13 @@
                   (mapcar #'(lambda (x)
                               (bad-pattern-check x *bad-pattern-test-pairs*))
                           preprocd)))
+         (typelabeled (mapcar #'(lambda (x)
+                                  (label-formula-types
+                                    x :callpkg :ulf-sanity-checker))
+                              preprocd))
+         (unknownmsg (if (member 'unknown (alxdr:flatten typelabeled))
+                       '((nil ("UNKNOWN detected in type analysis.  Please ensure this isn't from an annotation error.")))
+                       nil))
           allres)
 
     (format t linesep)
@@ -166,7 +174,7 @@
     (format t "Possible errors~%")
     (format t linesep)
 
-    (setq allres (append rawpatternres patternres))
+    (setq allres (append rawpatternres patternres unknownmsg))
     (if allres
       ;; Found some patterns.
       (dolist (x allres)
@@ -186,8 +194,6 @@
     (format t linesep)
     (format t "Formula with predicted types (for debugging).~%")
     (format t linesep)
-    (format t "~s~%~%" (mapcar #'(lambda (x)
-                                   (label-formula-types x :callpkg :ulf-sanity-checker))
-                               preprocd))
+    (format t "~s~%~%" typelabeled)
     ))
 

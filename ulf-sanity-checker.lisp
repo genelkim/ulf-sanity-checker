@@ -47,7 +47,7 @@
 
 (in-package :ulf-sanity-checker)
 
-(rename-package :alexandria :alxdr)
+(defpackage :alexandria (:use :cl) (:nicknames :alxdr))
 
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
@@ -144,7 +144,7 @@
              (bad-pattern-check
                (util:hide-ttt-ops f)
                *raw-bad-pattern-test-pairs*))
-         (preprocd (preprocess f))
+         (preprocd (util:intern-symbols-recursive (preprocess f) *package*))
          (linesep (format nil "************************************~%"))
          (patternres
            (apply #'append

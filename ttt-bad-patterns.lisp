@@ -48,7 +48,7 @@
 
 (defparameter *ttt-bad-noun-reifier*
   '(!1 (noun-reifier? _! _+)
-       (noun-reifier (! ~ noun?))
+       (noun-reifier? (! ~ noun?))
        (_+ noun-reifier? _*)))
 (defparameter *bad-noun-reifier-msg*
   "k takes a single nominal argument.")

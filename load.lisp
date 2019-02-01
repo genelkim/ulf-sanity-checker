@@ -49,6 +49,6 @@
                  #'(lambda (c) (declare (ignore c)) (muffle-warning)))))
 ;; Choose between the following two lines depending on
 ;; whether you want the files compiled into FASLs or not:
-;(asdf:operate 'asdf:load-op 'ulf-sanity-checker) ;; Compile and load as necessary
-(asdf:operate 'asdf:load-source-op 'ulf-sanity-checker) ;; Doesn't compile
+(asdf:operate 'asdf:load-op 'ulf-sanity-checker) ;; Compile and load as necessary
+;(asdf:operate 'asdf:load-source-op 'ulf-sanity-checker) ;; Doesn't compile
 

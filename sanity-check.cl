@@ -16,8 +16,8 @@
 ;; script.
 (load "/home/webapp/quicklisp/setup")
 ;(load "~/quicklisp/setup")
-(ql:quickload :util :silent t)
-(ql:quickload :ulf-lib :silent t)
+;(ql:quickload :util :silent t)
+;(ql:quickload :ulf-lib :silent t)
 
 (load "load")
 (in-package :ulf-sanity-checker)

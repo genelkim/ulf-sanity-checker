@@ -309,6 +309,12 @@
 (defparameter *bad-sent-term-msg*
   "Sentences and terms cannot combine.")
 
+(defparameter *ttt-old-adj-mod*
+  '(!1 (adv-a? adj?)
+       (adj? adv-a?)))
+(defparameter *old-adj-mod-msg*
+  "adv-a is no longer the modifier for adjectives.  Please use mod-a.")
+
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt::match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt::match-expr *ttt-bad-prep* x))
@@ -346,6 +352,7 @@
 (defun bad-aux-before-arg? (x) (ttt::match-expr *ttt-bad-aux-before-arg* x))
 (defun bad-pasv? (x) (ttt::match-expr *ttt-bad-pasv* x))
 (defun bad-verb-args? (x) (ttt::match-expr *ttt-bad-verb-args* x))
+(defun bad-adv-a-arg? (x) (ttt::match-expr *ttt-bad-adv-a-arg* x))
 (defun suspicious-locative? (x) (ttt::match-expr *ttt-suspicious-locative* x))
 (defun suspicious-do? (x) (ttt::match-expr *ttt-suspicious-do* x))
 (defun suspicious-will? (x) (ttt::match-expr *ttt-suspicious-will* x))
@@ -353,7 +360,7 @@
 (defun bad-voc? (x) (ttt::match-expr *ttt-bad-voc* x))
 (defun bad-inv-pasv? (x) (ttt::match-expr *ttt-bad-inv-pasv* x))
 (defun bad-sent-term? (x) (ttt::match-expr *ttt-bad-sent-term* x))
-(defun bad-adv-a-arg? (x) (ttt::match-expr *ttt-bad-adv-a-arg* x))
+(defun old-adj-mod? (x) (ttt:match-expr *ttt-old-adj-mod* x))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -389,7 +396,8 @@
     (list #'suspicious-will? *suspicious-will-msg*)
     (list #'bad-name-decomp? *bad-name-decomp-msg*)
     (list #'bad-sent-term? *bad-sent-term-msg*)
-    (list #'bad-adv-a-arg? *bad-adv-a-arg-msg*) 
+    (list #'bad-adv-a-arg? *bad-adv-a-arg-msg*)
+    (list #'old-adj-mod? *old-adj-mod-msg*)
     ))
 
 ;; Same as above but run on raw formulas (before preprocessing).

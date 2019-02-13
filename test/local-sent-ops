@@ -1,0 +1,6 @@
+(you.pro
+ ((pres must.aux-v)
+	(not (lose.v
+				(k
+				 (sight.n
+					(of.p-arg (your.d (goal.n (mod-n (in.p (k life.n))))))))))))

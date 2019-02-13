@@ -163,19 +163,14 @@
                        nil))
           allres)
 
-    (format t linesep)
-    (format t "Sanity checking formula (before preprocessing).~%")
-    (format t linesep)
-    (format t "~s~%~%" f)
+    (format t linesep) ; DO NOT DELETE OR COMMENT (used for filtering system messages)
+    (format t "## Sanity checking formula (before preprocessing).~%")
+    (format t "```~%~s~%```~%~%" f)
 
-    (format t linesep)
-    (format t "Sanity checking formula (after preprocessing).~%")
-    (format t linesep)
-    (format t "~s~%~%" preprocd)
+    (format t "## Sanity checking formula (after preprocessing).~%")
+    (format t "```~%~s~%```~%~%" preprocd)
 
-    (format t linesep)
-    (format t "Possible errors~%")
-    (format t linesep)
+    (format t "## Possible errors~%")
 
     (setq allres (append rawpatternres patternres unknownmsg))
     (if allres
@@ -185,18 +180,16 @@
               (msgs (second x)))
           (format t "~%Possibly failed conditions:~%")
           (dolist (msg msgs)
-            (format t "  ~s~%" msg))
-          (format t "Ann segment:~%  ~s~%" segment)
+            (format t "  _~s_~%" msg))
+          (format t "Ann segment:~%  ```~%~s~%```~%" segment)
           (format t "Predicted constituent types ((list of types) -- constituent)~%")
           (dolist (arg segment)
-            (format t "  ~s~%" (list (ulf-type? arg) '-- arg)))))
+            (format t "  ```~%~s~%```~%" (list (ulf-type? arg) '-- arg)))))
       ;; No patterns.
       (format t "****No errors detected.****~%"))
 
     (format t "~%")
-    (format t linesep)
-    (format t "Formula with predicted types (for debugging).~%")
-    (format t linesep)
-    (format t "~s~%~%" typelabeled)
+    (format t "## Formula with predicted types (for debugging).~%")
+    (format t "~%```~%~s~%```~%~%" typelabeled)
     ))
 

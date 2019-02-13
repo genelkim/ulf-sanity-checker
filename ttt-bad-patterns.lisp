@@ -255,13 +255,6 @@
 (defparameter *bad-pasv-msg*
   "'pasv' must be in the following construction (pasv <verb>).")
 
-(defparameter *ttt-bad-inv-pasv*
-  '(!1 
-     ((pasv _!) term? _*)
-     ((lex-tense? (pasv _!)) term? _*)))
-(defparameter *bad-inv-pasv-msg*
-  "'pasv' should be manually uninverted.")
-
 (defparameter *ttt-bad-verb-args*
   '(!1
      (((! verb? tensed-verb?) _*1 (! term? p-arg? pred?) _*2) _*3 (! term? p-arg? pred?) _*4)))
@@ -358,7 +351,6 @@
 (defun suspicious-will? (x) (ttt::match-expr *ttt-suspicious-will* x))
 (defun bad-name-decomp? (x) (ttt::match-expr *ttt-bad-name-decomp* x))
 (defun bad-voc? (x) (ttt::match-expr *ttt-bad-voc* x))
-(defun bad-inv-pasv? (x) (ttt::match-expr *ttt-bad-inv-pasv* x))
 (defun bad-sent-term? (x) (ttt::match-expr *ttt-bad-sent-term* x))
 (defun old-adj-mod? (x) (ttt:match-expr *ttt-old-adj-mod* x))
 
@@ -409,6 +401,5 @@
     (list #'bad-qt-attr? *bad-qt-attr-msg*)
     (list #'bad-rel-sent? *bad-rel-sent-msg*)
     (list #'bad-voc? *bad-voc-msg*)
-    (list #'bad-inv-pasv? *bad-inv-pasv-msg*)
     ))
 

@@ -81,7 +81,7 @@
 
     ;; Main body, run the preprocessing functions.
     (let* ((subres (multiple-value-list
-                     (ulf:apply-sub-macro f)))
+                     (ulf:apply-sub-macro f :calling-package :ulf-sanity-checker)))
            (subf (second subres))
            (adv-a-lifted (ulf:lift-adv-a subf))
            (sent-op-pair (extract-sent-ops adv-a-lifted))
@@ -145,6 +145,9 @@
                (util:hide-ttt-ops f)
                *raw-bad-pattern-test-pairs*))
          (preprocd (util:intern-symbols-recursive (preprocess f) *package*))
+         (ppfm (first preprocd)) ; preprocessed formula
+         (sops (second preprocd)) ; sentence operators
+         (vocs (third preprocd)) ; vocatives
          (linesep (format nil "************************************~%"))
          (patternres
            (apply #'append
@@ -154,7 +157,7 @@
          (typelabeled (mapcar #'(lambda (x)
                                   (label-formula-types
                                     x :callpkg :ulf-sanity-checker))
-                              preprocd))
+                              (cons ppfm (append sops vocs))))
          (unknownmsg (if (member 'unknown (alxdr:flatten typelabeled))
                        '((nil ("UNKNOWN detected in type analysis.  Please ensure this isn't from an annotation error.")))
                        nil))

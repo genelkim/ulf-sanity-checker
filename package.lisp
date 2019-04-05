@@ -4,7 +4,7 @@
 (in-package :cl-user)
 
 (defpackage :ulf-sanity-checker
-  (:use :cl :ttt :util :ulf-lib :alexandria)
+  (:use :cl :ttt :cl-util :ulf-lib :alexandria)
   (:export sanity-check))
 
 ;; Inherit all the ulf-lib external symbols.

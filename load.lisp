@@ -3,18 +3,12 @@
 (require 'asdf)
 
 ;; Try to be quiet.
-(setf (sys:gsgc-switch :print) nil)
-(setf (sys:gsgc-switch :stats) nil)
-(setf (sys:gsgc-switch :verbose) nil)
 (defvar *asdf-verbose* nil)
 
 ;; avoids saving compiled files in special local cache.
-(let f (and (setq f (fboundp (find-symbol "DISABLE-OUTPUT-TRANSLATIONS" 'asdf)))
-	    (funcall f)))
+(if (fboundp (find-symbol "DISABLE-OUTPUT-TRANSLATIONS" 'asdf))
+    (funcall (find-symbol "DISABLE-OUTPUT-TRANSLATIONS" 'asdf)))
 
-;; Suppress warnings.
-(handler-bind ((excl::warning
-                 #'(lambda (c) (declare (ignore c)) (muffle-warning)))))
 ;; from http://www.cliki.net/asdf
 ;;; If the fasl was stale, try to recompile and load (once). Since only SBCL
 ;;; has a separate condition for bogus fasls we retry on any old error
@@ -42,13 +36,16 @@
       asdf:*central-registry*)
 
 ;; Be quick.
-(proclaim '(optimize (speed 1) (safety 2) (space 3) (debug 0)))
+(proclaim '(optimize (speed 3) (safety 3) (space 0) (debug 3)))
 
-;; Suppress warnings.
-(handler-bind ((excl::warning
-                 #'(lambda (c) (declare (ignore c)) (muffle-warning)))))
+(locally
+  (declare #+sbcl(sb-ext:muffle-conditions sb-kernel:redefinition-warning))
+  (handler-bind
+    (#+sbcl(sb-kernel:redefinition-warning #'muffle-warning))
+    ;; stuff that emits redefinition-warning's
 ;; Choose between the following two lines depending on
 ;; whether you want the files compiled into FASLs or not:
 (asdf:operate 'asdf:load-op 'ulf-sanity-checker) ;; Compile and load as necessary
 ;(asdf:operate 'asdf:load-source-op 'ulf-sanity-checker) ;; Doesn't compile
+))
 

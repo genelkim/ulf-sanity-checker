@@ -1,19 +1,19 @@
-**ULF Sanity Checker**
+# ULF Sanity Checker
 
 A quick-and-dirty ULF type analysis and sanity checker to assist in
 annotations.  It performs an approximate type analysis of the formula and
 identifies combinations of types that are not allowed.
 
-== Dependencies ==
+## Dependencies
 Python 2
-Allegro Common Lisp (hopefully we will generalize this soon)
+SBCL (possibly Allegro Common Lisp as well)
 Quicklisp
 TTT
 genelkim/cl-util
 genelkim/ulf-lib
 
 
-== Install ==
+## Install
 
 1. Run the install script (TODO: write this...).  This will download the 
 appropriate libraries and jars. 
@@ -21,14 +21,14 @@ appropriate libraries and jars.
 2. Make sure that the local Common Lisp libraries (TTT, cl-util, ulf-lib)
 are installed in a location that is discoverable by ASDF and Quicklisp. 
 
-== Versions ==
+## Versions
 For details of the systems, please see the README in the respective tagged commits.
 
 * v1.0 was used from Fall 2017 through summer 2018
 * v2.0 was introduced in Fall 2018 for the 2018 interannotator agreement experiment, which included some minor changes to the annotation guidelines.
 
 
-== Running the Checker ==
+## Running the Checker
 
 The simplest way to run the checker is to call local_sanity_checker.sh with a
 single argument that is a filepath containing the ULF to check.  The function

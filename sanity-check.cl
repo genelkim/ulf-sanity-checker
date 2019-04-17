@@ -23,8 +23,7 @@
   (format t "    o  formula in quotes~%")
   (exit))
 
-;(load "load")
-(load "sbcl-load")
+(load "load")
 (in-package :ulf-sanity-checker)
 
 (let* ((use-stdin nil)

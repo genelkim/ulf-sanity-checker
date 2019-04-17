@@ -47,8 +47,6 @@
 
 (in-package :ulf-sanity-checker)
 
-(defpackage :alexandria (:use :cl) (:nicknames :alxdr))
-
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
 ;; Apply sub macros
@@ -83,7 +81,8 @@
     (let* ((subres (multiple-value-list
                      (ulf:apply-sub-macro f :calling-package :ulf-sanity-checker)))
            (subf (second subres))
-           (adv-a-lifted (ulf:lift-adv-a subf))
+           (qt-attr-f (nth-value 1 (ulf:apply-qt-attr-macro subf :calling-package :ulf-sanity-checker)))
+           (adv-a-lifted (ulf:lift-adv-a qt-attr-f))
            (sent-op-pair (extract-sent-ops adv-a-lifted))
            (voc-pair (extract-vocs sent-op-pair))
            (main-sent (first (first voc-pair)))
@@ -158,7 +157,7 @@
                                   (label-formula-types
                                     x :callpkg :ulf-sanity-checker))
                               (cons ppfm (append sops vocs))))
-         (unknownmsg (if (member 'unknown (alxdr:flatten typelabeled))
+         (unknownmsg (if (member 'unknown (alexandria:flatten typelabeled))
                        '((nil ("UNKNOWN detected in type analysis.  Please ensure this isn't from an annotation error.")))
                        nil))
           allres)

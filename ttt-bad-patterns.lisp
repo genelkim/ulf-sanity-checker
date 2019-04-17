@@ -3,11 +3,15 @@
 (in-package :ulf-sanity-checker)
 
 (defparameter *ttt-bad-det*
-  '(!1 (det? _! _+)
+  '(!1 (_* det? _*)
       ;; The only things that can be arguments to determiners are nouns,
       ;; rarely prepositions, and typeless predicates (e.g. (= ..)).
-      (det? (! ~ noun? pp? (= _!) unknown?))
-      (_+ det? _*)))
+       ~ (det? (! noun? pp? (= _!) unknown?))
+         ((* det?) lex-coord? (+ det?))))
+;  '(!1
+;      (det? _! _+)
+;      (det? (! ~ noun? pp? (= _!) unknown?))
+;      (_+ det? _*)))
 (defparameter *bad-det-msg*
   "Determiners take 1 nominal (noun) or, rarely, prepositional argument.")
 
@@ -54,7 +58,7 @@
   "k takes a single nominal argument.")
 
 (defparameter *ttt-conservative-bad-sent-reifier*
-  '(!1 
+  '(!1
      (sent-reifier? _! _+)
      (sent-reifier? term?)
      (_+ sent-reifier? _*)
@@ -257,14 +261,20 @@
 
 (defparameter *ttt-bad-verb-args*
   '(!1
-     (((! verb? tensed-verb?) _*1 (! term? p-arg? pred?) _*2) _*3 (! term? p-arg? pred?) _*4)))
+     (((! verb? tensed-verb?) _*1 (! term? p-arg? pred?) _*2) _*3 (! term? p-arg? pred?) _*4)
+     ~  
+     ((+ verb?) lex-coord? (+ verb?))
+     ((+ tensed-verb?) lex-coord? (+ tensed-verb?))))
 (defparameter *bad-verb-args-msg*
   "Verbs (both tensed and untensed) *must* take all non-subject arguments in a flat construction.")
 
 (defparameter *ttt-bad-adv-a-arg*
   '(!1
      (((! verb? tensed-verb?) adv-a?) _*1 (! term? p-arg? pred?) _*2)
-     ((adv-a? (! verb? tensed-verb?)) _*1 (! term? p-arg? pred?) _*2)))
+     ((adv-a? (! verb? tensed-verb?)) _*1 (! term? p-arg? pred?) _*2)
+     ~  
+     ((+ verb?) lex-coord? (+ verb?))
+     ((+ tensed-verb?) lex-coord? (+ tensed-verb?))))
 (defparameter *bad-adv-a-arg-msg*
   "All non-subject arguments must by supplied to the verb before directly applying action adverbs.")
 

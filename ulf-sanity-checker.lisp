@@ -78,10 +78,9 @@
      ); end of labels definitions.
 
     ;; Main body, run the preprocessing functions.
-    (let* ((subres (multiple-value-list
-                     (ulf:apply-sub-macro f :calling-package :ulf-sanity-checker)))
-           (subf (second subres))
-           (qt-attr-f (nth-value 1 (ulf:apply-qt-attr-macro subf :calling-package :ulf-sanity-checker)))
+    (let* ((subf (nth-value 1 (ulf:apply-sub-macro f :calling-package :ulf-sanity-checker)))
+           (repf (nth-value 1 (ulf:apply-rep-macro f :calling-package :ulf-sanity-checker)))
+           (qt-attr-f (nth-value 1 (ulf:apply-qt-attr-macro repf :calling-package :ulf-sanity-checker)))
            (adv-a-lifted (ulf:lift-adv-a qt-attr-f))
            (sent-op-pair (extract-sent-ops adv-a-lifted))
            (voc-pair (extract-vocs sent-op-pair))

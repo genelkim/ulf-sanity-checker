@@ -1,0 +1,71 @@
+((IT-EXTRA.PRO
+  (((PRES BE.V) TRUE.A)
+   (THT
+    ((A.D
+      (N+PREDS CHILD.N
+       (JUST.ADV-E
+        ((PASV DROP.V) (ADV-A (FROM.P (ITS.D (DAM-OF.N *S))))))))
+     ((PRES MAY.AUX-S)
+      ((PASV SUPPORT.V) (BY.P-ARG (HER.D MILK.N))
+       (ADV-E (FOR.P (A.D (SOLAR.A YEAR.N))))
+       (ADV-A
+        (WITH.P
+         (NP+PREDS (K (LITTLE.A (OTHER.A NOURISHMENT.N)))
+          ((MOD-A (AT.P (THE.D (MOST.A REF.N))))
+           (NOT (ABOVE.P
+                 (THE.D
+                  (VALUE-OF.N
+                   (NP+PREDS (TWO.D (PLUR SHILLING.N))
+                    (SUB WHICH.REL
+                         ((THE.D (MOTHER-OF.P *REF))
+                          ((PRES MAY.AUX-S) CERTAINLY.ADV-S
+                           (GET.V
+                            (*H OR.CC
+                             (THE.D
+                              (N+PREDS VALUE.N
+                               (IN.P (K (PLUR SCRAP.N))))))
+                            (ADV-A
+                             (BY.P
+                              (HER.D
+                               (N+PREDS
+                                (LAWFUL.A OCCUPATION.N)
+                                (OF.P
+                                 (KA BEG.V)))))))))))))))))))))))))
+ (AND.ADV-S
+  ((IT-CLEFT.PRO
+    (((PRES BE.V)
+      (ADV-E
+       (EXACTLY.ADV-S (AT.P (KA (BE.V ((ONE.D YEAR.N) OLD.A)))))))
+     (THAT.REL
+      (I.PRO
+       ((PRES PROPOSE.V)
+        (TO
+         (PROVIDE.V (FOR.P-ARG THEM.PRO)
+          (ADV-A (IN.P (SUCH.D (= (A.D MANNER.N))))))))))))
+   AS.CC
+   ((ADV-S
+     (INSTEAD_OF.P
+      ((KA
+        (BE.V
+         (A.D
+          (N+PREDS CHARGE.N
+           (UPON.P
+            ((THEIR.D (PLUR (PARENT-OF.N *S))) OR.CC
+             (THE.D PARISH.N)))))))
+       OR.CC
+       (KA
+        (WANT.V ((K FOOD.N) AND.CC (K RAIMENT.N))
+         (ADV-E
+          (FOR.P
+           (THE.D
+            (N+PREDS REST.N (OF.P (THEIR.D (PLUR LIFE.N))))))))))))
+    (THEY.PRO (PRES SHALL.AUX-S)
+     ((ADV-S (ON.P (THE.D CONTRARY.N)))
+      (CONTRIBUTE.V
+       ((TO.P-ARG (THE.D FEEDING.N)) AND.CC
+        (PARTLY.ADV-S
+         (TO.P-ARG
+          (THE.D
+           (CLOATHING.N
+            (OF.P-ARG (MANY.D (PLUR THOUSAND.N)))))))))))))))
+

@@ -182,7 +182,7 @@
           (format t "Ann segment:~%  ```~%~s~%```~%" segment)
           (format t "Predicted constituent types ((list of types) -- constituent)~%")
           (dolist (arg segment)
-            (format t "  ```~%~s~%```~%" (list (ulf-type? arg) '-- arg)))))
+            (format t "  ```~%~s~%```~%" (list (phrasal-ulf-type? arg) '-- arg)))))
       ;; No patterns.
       (format t "****No errors detected.****~%"))
 

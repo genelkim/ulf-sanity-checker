@@ -8,5 +8,6 @@
   :depends-on (:ttt :cl-util :ulf-lib :alexandria)
   :components ((:file "package")
                (:file "ttt-bad-patterns")
-               (:file "ulf-sanity-checker"))) 
+               (:file "ulf-sanity-checker")
+               (:file "ulf-ctp-interface")))
 

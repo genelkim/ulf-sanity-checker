@@ -1,4 +1,4 @@
-#! /usr/bin/sbcl --script
+#! /usr/local/bin/sbcl --script
 ; ABOVE: for running on sbcl
 ;#! /home/webapp/acl10.1express/alisp -#!
 ; ABOVE: for running in AWS.
@@ -11,12 +11,12 @@
 
 ;; For some reason the AWS lisp isn't loading Quicklisp automatically in this
 ;; script.
-;(load "/home/webapp/quicklisp/setup")
-(load "~/quicklisp/setup")
+(load "/home/webapp/quicklisp/setup")
+;(load "~/quicklisp/setup")
 ;(ql:quickload :util :silent t)
 ;(ql:quickload :ulf-lib :silent t)
 
-(ql:quickload :cl-util)
+(ql:quickload :cl-util :silent t)
 
 (when (not (>= (length (util:argv)) 1))
   (format t "USAGE: sanity-check.cl formula~%")

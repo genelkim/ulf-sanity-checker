@@ -79,7 +79,7 @@
 
     ;; Main body, run the preprocessing functions.
     (let* ((subf (nth-value 1 (ulf:apply-sub-macro f :calling-package :ulf-sanity-checker)))
-           (repf (nth-value 1 (ulf:apply-rep-macro f :calling-package :ulf-sanity-checker)))
+           (repf (nth-value 1 (ulf:apply-rep-macro subf :calling-package :ulf-sanity-checker)))
            (qt-attr-f (nth-value 1 (ulf:apply-qt-attr-macro repf :calling-package :ulf-sanity-checker)))
            (adv-a-lifted (ulf:lift-adv-a qt-attr-f))
            (sent-op-pair (extract-sent-ops adv-a-lifted))
@@ -90,11 +90,13 @@
            (paren-remvd-main-sent (remove-extra-parens main-sent))
            (uninv (ulf:uninvert-verbauxes paren-remvd-main-sent))
            (regrouped (list uninv sent-ops vocs)))
+      ;(format t "subf: ~s~%~%" subf)
       ;(format t "sent-op-pair ~s~%~%" sent-op-pair)
       ;(format t "voc-pair ~s~%~%" voc-pair)
       ;(format t "main-sent ~s~%~%" main-sent)
       ;(format t "paren-remvd-main-sent ~s~%~%" paren-remvd-main-sent)
       ;(format t "uninv ~s~%~%" uninv)
+      ;(format t "regrouped: ~s~%~%" regrouped)
       regrouped)))
 
 

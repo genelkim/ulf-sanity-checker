@@ -41,3 +41,24 @@
 		(loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test ds-string-bug
+  "Domain specific pattern fails from the string."
+  (:tag :bugfix :ds-string)
+  (let ((ulfs
+          '(
+            (sub (The.d (n+preds (plur number.n)
+                                 (present.v (by.p-arg (the.d (non-partisan.a
+                                                               (congressional.a agency.n)))))))
+                 ((if.ps (*h ((pres {be}.v) accurate.a)))
+                  ({they}.pro ((pres would.aux-s)
+                               (make.v it.pro
+                                       (adv-a ((mod-a (even.mod-a more.a))
+                                               (difficult.a
+                                                 (mod-a (for.p (|Bush| and.cc |Congress|)))
+                                                 (to (meet.v
+                                                       (((the.d (|Gramm-Rudman| ((balanced.a budget.n) law.n))) 's)
+                                                        (|1990| (n+preds (deficit.n target.n) (of.p (ds currency "$100 billion")))))))))))))))
+            )))
+		(loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

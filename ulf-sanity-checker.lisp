@@ -137,7 +137,7 @@
 
 
 ;; Main sanity checking function.
-(defun sanity-check (f)
+(defun sanity-check (f &key (silent? nil))
   (let* ((rawpatternres
              (bad-pattern-check
                (util:hide-ttt-ops f)
@@ -160,34 +160,36 @@
                        '((nil ("UNKNOWN detected in type analysis.  Please ensure this isn't from an annotation error.")))
                        nil))
           allres)
+    (when (not silent?)
+      (format t linesep) ; DO NOT DELETE OR COMMENT (used for filtering system messages)
+      (format t "## Sanity checking formula (before preprocessing).~%")
+      (format t "```~%~s~%```~%~%" f)
 
-    (format t linesep) ; DO NOT DELETE OR COMMENT (used for filtering system messages)
-    (format t "## Sanity checking formula (before preprocessing).~%")
-    (format t "```~%~s~%```~%~%" f)
+      (format t "## Sanity checking formula (after preprocessing).~%")
+      (format t "```~%~s~%```~%~%" preprocd)
 
-    (format t "## Sanity checking formula (after preprocessing).~%")
-    (format t "```~%~s~%```~%~%" preprocd)
-
-    (format t "## Possible errors~%")
+      (format t "## Possible errors~%"))
 
     (setq allres (append rawpatternres patternres unknownmsg))
-    (if allres
-      ;; Found some patterns.
-      (dolist (x allres)
-        (let ((segment (first x))
-              (msgs (second x)))
-          (format t "~%Possibly failed conditions:~%")
-          (dolist (msg msgs)
-            (format t "  _~s_~%" msg))
-          (format t "Ann segment:~%  ```~%~s~%```~%" segment)
-          (format t "Predicted constituent types ((list of types) -- constituent)~%")
-          (dolist (arg segment)
-            (format t "  ```~%~s~%```~%" (list (phrasal-ulf-type? arg) '-- arg)))))
-      ;; No patterns.
-      (format t "****No errors detected.****~%"))
+    (when (not silent?)
+      (if allres
+        ;; Found some patterns.
+        (dolist (x allres)
+          (let ((segment (first x))
+                (msgs (second x)))
+            (format t "~%Possibly failed conditions:~%")
+            (dolist (msg msgs)
+              (format t "  _~s_~%" msg))
+            (format t "Ann segment:~%  ```~%~s~%```~%" segment)
+            (format t "Predicted constituent types ((list of types) -- constituent)~%")
+            (dolist (arg segment)
+              (format t "  ```~%~s~%```~%" (list (phrasal-ulf-type? arg) '-- arg)))))
+        ;; No patterns.
+        (format t "****No errors detected.****~%"))
 
-    (format t "~%")
-    (format t "## Formula with predicted types (for debugging).~%")
-    (format t "~%```~%~s~%```~%~%" typelabeled)
+      (format t "~%")
+      (format t "## Formula with predicted types (for debugging).~%")
+      (format t "~%```~%~s~%```~%~%" typelabeled))
+    allres ; return all the results
     ))
 

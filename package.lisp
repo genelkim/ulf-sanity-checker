@@ -4,7 +4,7 @@
 (in-package :cl-user)
 
 (defpackage :ulf-sanity-checker
-  (:use :cl :ttt :cl-util :ulf-lib)
+  (:use :cl :ttt :cl-util :ulf-lib :lisp-unit)
   (:shadowing-import-from :alexandria)
   (:export sanity-check))
 

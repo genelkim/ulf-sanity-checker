@@ -1,7 +1,0 @@
-((sub 
-      How.pq 
-  ((pres can.aux-v) I.pro 
-   ((find_out.v 
-    (((nquan (how.adv-a much.a)) (income.n tax.n)) 
-     (((pres (pasv pay.v)) (on.p-arg (k ((|Social|.a Security|.n) income.n))))
-    						(adv-e (on.p (the.d (|1998| (income.n tax.n)))))))) *h))) ?)

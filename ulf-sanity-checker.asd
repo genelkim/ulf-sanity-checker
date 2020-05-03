@@ -5,7 +5,7 @@
   :name "ulf-sanity-checker"
   :version "0.3.0"
   :author "Gene Louis Kim"
-  :depends-on (:ttt :cl-util :ulf-lib :alexandria)
+  :depends-on (:ttt :cl-util :ulf-lib :alexandria :lisp-unit)
   :components ((:file "package")
                (:file "ttt-bad-patterns")
                (:file "ulf-sanity-checker")

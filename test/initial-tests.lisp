@@ -126,7 +126,7 @@
             							((be.v angry.a) (adv-a (about.p it.pro))))) !) |"|)
             (|"| ((pres will.aux-s) not you.pro
             (qt-attr he.pro (he.pro (((past say.v) *qt)
-            									(adv-a (interrupt.v ((|John| 's) monologue.n))))))
+            									(adv-a (interrupt.v ((|John| |'s|) monologue.n))))))
             	(please.adv-s ((get.v on.adv-a) (with.p-arg it.pro)))) |"|)
             (|"| ((pres will.aux-s) not you.pro
                                      (qt-attr (he.pro (((past say.v) *qt)
@@ -137,10 +137,10 @@
                ((pres can.aux-v) I.pro 
                                  ((find_out.v 
                                     (((nquan (how.adv-a much.a)) (income.n tax.n)) 
-                                     (((pres (pasv pay.v)) (on.p-arg (k ((|Social|.a Security|.n) income.n))))
+                                     (((pres (pasv pay.v)) (on.p-arg (k ((|Social|.a |Security|.n) income.n))))
                                       (adv-e (on.p (the.d (|1998| (income.n tax.n)))))))) *h))) ?)
-            (((That.rel ((pres be.v) (somewhat.adv-a ((past explain.v) (adv-a (at.p (the.d end.n)))))))) \.)
-            ((sub How.pq ((pres be.v) (((|Easter Sunday|) 's) date.n) determined.a *h)) ?)
+            (((That.rel ((pres be.v) (somewhat.adv-a ((past explain.v) (adv-a (at.p (the.d end.n)))))))) |.|)
+            ((sub How.pq ((pres be.v) ((|Easter Sunday| 's) date.n) determined.a *h)) ?)
             (We.pro ((past eat.v) 
                      (adv-e (at.p (a.d (n+preds restaurant.n 
                                                 (just.adv-a (outside.p |Boston|))))))))
@@ -303,8 +303,8 @@
        (you.pro ((pres perf) (see.v (them.d (all.a {ref}.n)))))) |"|))) ?)
 ((sub (|"| (now.adv-e
 ((sub what.pro 
- (((pres prog) pester.v) (me.pro for.p) *h)) ?) |"|))
- ((past cry.v) |Denisov| (suddenly.adv-e ((adv-a (lose.v his.pro temper.n)))) *h)))
+ (((pres prog) pester.v) (me.pro for.p) *h)) ?)) |"|))
+ ((past cry.v) |Denisov| (suddenly.adv-e ((adv-a (lose.v his.pro temper.n)))) *h))
 ((k Logic.n) 
  ((pres be.v) 
   (= (a.d (systematic.a 

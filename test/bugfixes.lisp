@@ -31,3 +31,13 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test quotes-as-pred-mod
+  "Error raised on quotes with terms."
+  (:tag :bugfix :quote-as-pred-mod)
+  (let ((ulfs
+          '((THEY.PRO
+						 (((PAST CALL.V) HIM.PRO (|"| (MY.D LORD.N) |"|)) AND.CC
+						  ((PAST LAUGH.V) (AT.P-ARG (ALL.D (OF.P (HIS.D STORY.N))))))))))
+		(loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

@@ -13,7 +13,7 @@
   (:tag :initial :no-error)
   (let ((ulfs
           '((((three.d four.d or.cc six.d) (plur person.n)) (past leave.v))
-            (((pres do.aux-v) you.pro (know.v me.pro)) ?)
+            (((pres do.aux-s) you.pro (know.v me.pro)) ?)
             ((sub (sub How.pq 
                        ((pres can.aux-v) I.pro 
                                          (stop.v (adv-a (with.p her.pro))) *h)) 
@@ -93,19 +93,20 @@
               ((PRES SHOULD.AUX-V)
                ((ASK.V (YOUR.D (FATHER-OF.N *S)) (ADV-A (FOR.P (HIS.D ADVICE.N))))
                 AND.CC (FOLLOW.V IT.PRO))))
-            (I.pro ((pres will.aux-v) (go.v there.adv-e)))
+            (I.pro ((pres will.aux-s) (go.v there.adv-e)))
             ((sub Why.adv-s 
                   ((pres do.aux-s) not you.pro 
                                    (give.v me.pro (a.d break.n) *h))) ?)
            )))
     (loop for ulf in ulfs
-          do (assert-equal nil (sanity-check ulf :silent? t)))))
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
 (define-test yes-error-sanity-tests
   "Ensure these have some error"
   (:tag :initial :yes-error)
   (let ((ulfs
           '((((fquan (= 0.6.a)) (plur man.n)) (pres sleep.v))
+            (((pres do.aux-v) you.pro (know.v me.pro)) ?)
             ; original inverted passives
             ((sub when.adv-e ((past (pasv invent.v)) (the.d (first.a (flush.n toilet.n))))) ?)
             ((sub when.adv-e ((past (pasv invent.v)) (the.d (first.a (flush.n toilet.n))) *h)) ?)
@@ -145,6 +146,7 @@
                      (adv-e (at.p (a.d (n+preds restaurant.n 
                                                 (just.adv-a (outside.p |Boston|))))))))
             ((pres do.aux-s) you.pro really.adv-a ((pres want.v) that.pro) ?)
+            (I.pro ((pres will.aux-v) (go.v there.adv-e)))
             )))
     (loop for ulf in ulfs
           do (assert-true (not (equal
@@ -156,7 +158,7 @@
 (define-test large-example-tests
   "Test large examples"
   (:tag :initial :large)
-  (let ((time-limit 5)
+  (let ((time-limit 10)
         runtime
         (ulfs
           '(
@@ -272,16 +274,16 @@
 (((adv-s (For.p (k example.n))) 
  (sub what.pro 
       (exactly.adv-s 
-       ((past do.aux-s) (the.d |CIA|.n) 
+       ((past do.aux-s) (the.d | CIA|.n) 
       ((tell.v (set-of |Major Giroldi| (his.d (fellow.a (coup.n (plur plotter.n))))))
          (np+preds *h
              (about.p 
-                    (set-of (k (|U.S.| (plur law.n)))  
+                    (set-of (k (| U.S.| (plur law.n)))  
                         (k (n+preds (executive.a (plur order.n)) 
                                     (on.p (k (plur assassination.n))))))))))))) ?)
 ((sub (What.d part.n) 
  ((past do.aux-s) 
-  (k (|U.S.| (plur warning.n))) 
+  (k (| U.S.| (plur warning.n))) 
   ((play.v *h) 
    (in.p-arg 
     (((the.d major.n) 's) 
@@ -296,7 +298,7 @@
                                          (by.p-arg 
                                           (k ((pro.p |Noriega|) (plur troop.n))))))))) 
                           (adv-e *h)))))))))))))) ?)
-(((What.d (|U.S.| vice-president.n)) 
+(((What.d (| U.S.| vice-president.n)) 
   once.adv-e 
   ((past declare.v) 
   (|"| ((If.ps (you.pro ((pres perf) (see.v (one.d slum.n))))) 
@@ -329,6 +331,7 @@
           do (multiple-value-bind
                (result runtime)
                (util:timing #'(lambda () (sanity-check ulf :silent? t)))
+               (declare (ignore result))
                (assert-true (< runtime time-limit)
                             ulf runtime time-limit)))))
 

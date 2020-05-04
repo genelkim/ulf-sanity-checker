@@ -168,7 +168,7 @@
   "The 'pu' operator takes a single phrase.")
 
 (defparameter *ttt-bad-flat-mod*
-  '((*1 ~ verb?)
+  '((*1 ~ verb? lex-macro?)
      (!2 adj? noun? term?)
      (!3 adj? noun? term?)
      (!4 adj? noun? term?)

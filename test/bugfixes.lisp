@@ -74,4 +74,35 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test predicate-modification-false-positive
+  "Error message about pairing up predicate modification is over eager."
+  (:tag :bugfix :pred-mod-false-positive)
+  (let ((ulfs
+          '(
+						(((NQUAN (MORE-THAN.MOD-A ONE.A)) (N+PREDS DREAMER.N (OF.P (THAT.D EPOCH.N))))
+						 OFTEN.ADV-F
+						 ((PAST ALLOW.V) ((HIS.D (PLUR THOUGHT.N)) AND.CC (HIS.D (PLUR EYE.N)))
+						  (TO
+						   (PENETRATE.V INDISCREETLY.ADV-A
+						    (ADV-A
+						     (BETWEEN.P
+						      (THE.D
+						       (N+PREDS (PLUR BAR.N)
+						        (OF.P
+						         (NP+PREDS (THAT.D ((ANCIENT.A AND.CC PADLOCKED.A) GATE.N)) TWISTED.A
+						          TOTTERING.A
+						          (((PASV FASTEN.V)
+						            (TO.P-ARG
+						             (TWO.D ((GREEN.A AND.CC MOSS-COVERED.A) (PLUR PILLAR.N)))))
+						           AND.CC
+						           (ODDLY.ADV-A
+						            ((PASV CROWN.V)
+						             (ADV-A
+						              (WITH.P
+						               (A.D
+						                (N+PREDS PEDIMENT.N
+						                 (OF.P (K (UNDECIPHERABLE.A ARABESQUE.N))))))))))))))))))))
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 

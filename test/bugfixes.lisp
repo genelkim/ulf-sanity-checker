@@ -62,3 +62,16 @@
 		(loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test preverb-flat-mod
+  "Type UKNOWN when verb is premodified in a flat manner."
+  (:tag :bugfix :verb-premod)
+  (let ((ulfs
+          '(
+            ((SUB (ADV-A (WITH.P (A.D (PHILOSOPHICAL.A FLOURISH.N))))
+                  (|Cato| ((PRES THROW.V) HIMSELF.PRO (ADV-A (UPON.P (HIS.D SWORD.N))) *H)))
+             (I.PRO (QUIETLY.ADV-A (PRES TAKE.V) (TO.P-ARG (THE.D SHIP.N)))))
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+
+

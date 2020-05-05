@@ -35,9 +35,13 @@
   "Error raised on quotes with terms."
   (:tag :bugfix :quote-as-pred-mod)
   (let ((ulfs
-          '((THEY.PRO
+          '(
+            (THEY.PRO
 						 (((PAST CALL.V) HIM.PRO (|"| (MY.D LORD.N) |"|)) AND.CC
-						  ((PAST LAUGH.V) (AT.P-ARG (ALL.D (OF.P (HIS.D STORY.N))))))))))
+						  ((PAST LAUGH.V) (AT.P-ARG (ALL.D (OF.P (HIS.D STORY.N)))))))
+						(({the}.d (old.a |Fauchelevent|.n)) ((past return.v) (|"| Exactly.adv-s |"|)))
+						(|"| (THE.D (|Petit-Picpus| CONVENT.N)) |"|)
+            )))
 		(loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 

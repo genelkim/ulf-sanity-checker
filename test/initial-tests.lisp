@@ -14,17 +14,17 @@
   (let ((ulfs
           '((((three.d four.d or.cc six.d) (plur person.n)) (past leave.v))
             (((pres do.aux-s) you.pro (know.v me.pro)) ?)
-            ((sub (sub How.pq 
-                       ((pres can.aux-v) I.pro 
-                                         (stop.v (adv-a (with.p her.pro))) *h)) 
+            ((sub (sub How.pq
+                       ((pres can.aux-v) I.pro
+                                         (stop.v (adv-a (with.p her.pro))) *h))
                   (you.pro ((pres mean.v) (ans-to *h)))) ?)
             (I.pro ((past deliver.v) (the.d artifact.n)
                                      carefully.adv-a
                                      (to.p-arg (the.d curator.n))))
             (((fquan (= 0.6)) (plur man.n)) (pres sleep.v))
             ((sub when.adv-e ((past be.aux-v)
-                              (the.d (first.a (flush.n toilet.n))) 
-                              ((past (pasv invent.v)) *h))) ?)
+                              (the.d (first.a (flush.n toilet.n)))
+                              ((pasv invent.v) *h))) ?)
             ((they.pro ((past (pasv trick.v)) (into.p-arg (ka go.v)))) ?)
             ; be.aux-v inverted passive
             (((past be.aux-v) they.pro ((pasv trick.v) (into.p-arg (ka go.v)))) ?)
@@ -36,8 +36,8 @@
                           (of.p-arg (your.d (goal.n (mod-n (in.p (k life.n))))))))))))
             (((past make.v) he.pro (a.d table.n)) ?)
             (you.pro ((pres be.v) (way.mod-a (off.p (the.d track.n)))))
-            ((Who.pro ((past be.v) (= (the.d (1st.a (|U.S.| |President|.n)))))) ?)
-            ; flattened args 
+            ((Who.pro ((past be.v) (= (the.d (1st.a (| U.S. President|.n)))))) ?)
+            ; flattened args
             (I.pro ((past deliver.v) (the.d artifact.n)
                                      carefully.adv-a
                                      (to.p-arg (the.d curator.n))))
@@ -60,24 +60,24 @@
              ?)
             ((REP (*P ((PRES LET.V) US.PRO GO.V)) (K (PLUR DUDE.N))) !)
             (i.pro definitely.adv-s ((past give.v) him.pro (a.d present.n) yesterday.adv-e (adv-e (at.p (k school.n)))))
-            (((((My.d printer.n) 's) (black.n ink.n)) ((pres be.v) defective.a)) 
-             ((it.pro ((pres bleed.v) (adv-a (across.p (the.d page.n))))) 
+            (((((My.d printer.n) 's) (black.n ink.n)) ((pres be.v) defective.a))
+             ((it.pro ((pres bleed.v) (adv-a (across.p (the.d page.n)))))
               (if.ps (I.pro ((pres touch.v) it.pro
                                             (adv-a (with.p (my.d finger.n))))))))
-            (We.pro ((past eat.v) 
-                     (adv-e (at.p (a.d (n+preds restaurant.n 
+            (We.pro ((past eat.v)
+                     (adv-e (at.p (a.d (n+preds restaurant.n
                                                 (just.mod-a (outside.p |Boston|))))))))
-            (|Tom| 
-              ((past do.aux-s) not 
-                               (know.v 
-                                 (whether 
-                                   (it-extra.pro (((past will.aux-s) (be.v (worth.a (his.d while.n)))) 
+            (|Tom|
+              ((past do.aux-s) not
+                               (know.v
+                                 (whether
+                                   (it-extra.pro (((past will.aux-s) (be.v (worth.a (his.d while.n))))
                                                   (ka (apply.v (for.p-arg (the.d job.n))))))))))
-            ((sub What.pro 
+            ((sub What.pro
                   ((pres do.aux-s) (ds math-expression "7847+5943") (equal.v *h))) ?)
             ((((the.d ventriloquist.n) 's) (voice-of.n *s)) ((past repeat.v) (his.d distich.n)))
-            ((sub (What.d (two.a (plur country.n))) 
-                  ((pres be.v) |Andorra| (nestled.a 
+            ((sub (What.d (two.a (plur country.n)))
+                  ((pres be.v) |Andorra| (nestled.a
                                            (mod-a (between.p *h))))) ?)
             ((voc |Mary|) (I.pro ((pres see.v) you.pro)))
             ((My.d (n+preds (ill.a (plur feeling.n))
@@ -94,8 +94,8 @@
                ((ASK.V (YOUR.D (FATHER-OF.N *S)) (ADV-A (FOR.P (HIS.D ADVICE.N))))
                 AND.CC (FOLLOW.V IT.PRO))))
             (I.pro ((pres will.aux-s) (go.v there.adv-e)))
-            ((sub Why.adv-s 
-                  ((pres do.aux-s) not you.pro 
+            ((sub Why.adv-s
+                  ((pres do.aux-s) not you.pro
                                    (give.v me.pro (a.d break.n) *h))) ?)
            )))
     (loop for ulf in ulfs
@@ -108,15 +108,18 @@
           '((((fquan (= 0.6.a)) (plur man.n)) (pres sleep.v))
             (((pres do.aux-v) you.pro (know.v me.pro)) ?)
             ; original inverted passives
+            ((sub when.adv-e ((past be.aux-v)
+                              (the.d (first.a (flush.n toilet.n)))
+                              ((past (pasv invent.v)) *h))) ?)
             ((sub when.adv-e ((past (pasv invent.v)) (the.d (first.a (flush.n toilet.n))))) ?)
             ((sub when.adv-e ((past (pasv invent.v)) (the.d (first.a (flush.n toilet.n))) *h)) ?)
             (((past pasv) they.pro (trick.v (into.p-arg (ka go.v)))) ?)
             ; unflattened args
             (I.pro (((past deliver.v) (the.d artifact.n) carefully.adv-a)
                     (to.p-arg (the.d curator.n))))
-            (I.pro (((past deliver.v) (the.d artifact.n)) 
+            (I.pro (((past deliver.v) (the.d artifact.n))
                      carefully.adv-a (to.p-arg (the.d curator.n))))
-            (I.pro ((((past deliver.v) (the.d artifact.n)) 
+            (I.pro ((((past deliver.v) (the.d artifact.n))
                      carefully.adv-a) (to.p-arg (the.d curator.n))))
             ; bad passive
             (you.pro ((pres pasv) require.v) (to (help.v them.pro)))
@@ -133,20 +136,22 @@
                                      (qt-attr (he.pro (((past say.v) *qt)
                                                        (adv-a (interrupt.v ((|John| 's) monologue.n))))))
                                      (please.adv-s ((get.v on.adv-a) (with.p-arg it.pro)))) |"|)
-            ((sub 
-               How.pq 
-               ((pres can.aux-v) I.pro 
-                                 ((find_out.v 
-                                    (((nquan (how.adv-a much.a)) (income.n tax.n)) 
+            ((sub
+               How.pq
+               ((pres can.aux-v) I.pro
+                                 ((find_out.v
+                                    (((nquan (how.adv-a much.a)) (income.n tax.n))
                                      (((pres (pasv pay.v)) (on.p-arg (k ((|Social|.a |Security|.n) income.n))))
                                       (adv-e (on.p (the.d (|1998| (income.n tax.n)))))))) *h))) ?)
             (((That.rel ((pres be.v) (somewhat.adv-a ((past explain.v) (adv-a (at.p (the.d end.n)))))))) |.|)
             ((sub How.pq ((pres be.v) ((|Easter Sunday| 's) date.n) determined.a *h)) ?)
-            (We.pro ((past eat.v) 
-                     (adv-e (at.p (a.d (n+preds restaurant.n 
+            (We.pro ((past eat.v)
+                     (adv-e (at.p (a.d (n+preds restaurant.n
                                                 (just.adv-a (outside.p |Boston|))))))))
             ((pres do.aux-s) you.pro really.adv-a ((pres want.v) that.pro) ?)
             (I.pro ((pres will.aux-v) (go.v there.adv-e)))
+            ; Name splitting
+            ((Who.pro ((past be.v) (= (the.d (1st.a (| U.S.| |President|.n)))))) ?)
             )))
     (loop for ulf in ulfs
           do (assert-true (not (equal
@@ -271,46 +276,46 @@
 																														 (= (the.d (first.a (n+preds step.n
 																																								 (in.p (ka (get.v (the.d drug.n) (approved.a (for.p-arg (k (prescription.n (n+post use.n
 																																																																														(by.p-arg (the.d public.n)))))))))))))))))))))))))))
-(((adv-s (For.p (k example.n))) 
- (sub what.pro 
-      (exactly.adv-s 
-       ((past do.aux-s) (the.d | CIA|.n) 
+(((adv-s (For.p (k example.n)))
+ (sub what.pro
+      (exactly.adv-s
+       ((past do.aux-s) (the.d | CIA|.n)
       ((tell.v (set-of |Major Giroldi| (his.d (fellow.a (coup.n (plur plotter.n))))))
          (np+preds *h
-             (about.p 
-                    (set-of (k (| U.S.| (plur law.n)))  
-                        (k (n+preds (executive.a (plur order.n)) 
+             (about.p
+                    (set-of (k (| U.S.| (plur law.n)))
+                        (k (n+preds (executive.a (plur order.n))
                                     (on.p (k (plur assassination.n))))))))))))) ?)
-((sub (What.d part.n) 
- ((past do.aux-s) 
-  (k (| U.S.| (plur warning.n))) 
-  ((play.v *h) 
-   (in.p-arg 
-    (((the.d major.n) 's) 
-	 (unwillingness.a 
-	  (to ((pull.v (the.d trigger.n)) 
-		   (adv-e (sub (at-time.p which.rel) 
-                   	   ((he.pro 
-                         (((((past have.v) |General Noriega|) (in.p-arg (k custody.n)))  
-                           but.cc 
-                           ((past be.v) 
-                            (under.p (k (attack.n 
-                                         (by.p-arg 
-                                          (k ((pro.p |Noriega|) (plur troop.n))))))))) 
+((sub (What.d part.n)
+ ((past do.aux-s)
+  (k (| U.S.| (plur warning.n)))
+  ((play.v *h)
+   (in.p-arg
+    (((the.d major.n) 's)
+	 (unwillingness.a
+	  (to ((pull.v (the.d trigger.n))
+		   (adv-e (sub (at-time.p which.rel)
+                   	   ((he.pro
+                         (((((past have.v) |General Noriega|) (in.p-arg (k custody.n)))
+                           but.cc
+                           ((past be.v)
+                            (under.p (k (attack.n
+                                         (by.p-arg
+                                          (k ((pro.p |Noriega|) (plur troop.n)))))))))
                           (adv-e *h)))))))))))))) ?)
-(((What.d (| U.S.| vice-president.n)) 
-  once.adv-e 
-  ((past declare.v) 
-  (|"| ((If.ps (you.pro ((pres perf) (see.v (one.d slum.n))))) 
+(((What.d (| U.S.| vice-president.n))
+  once.adv-e
+  ((past declare.v)
+  (|"| ((If.ps (you.pro ((pres perf) (see.v (one.d slum.n)))))
        (you.pro ((pres perf) (see.v (them.d (all.a {ref}.n)))))) |"|))) ?)
 ((sub (|"| (now.adv-e
-((sub what.pro 
+((sub what.pro
  (((pres prog) pester.v) (me.pro for.p) *h)) ?)) |"|))
  ((past cry.v) |Denisov| (suddenly.adv-e ((adv-a (lose.v his.pro temper.n)))) *h))
-((k Logic.n) 
- ((pres be.v) 
-  (= (a.d (systematic.a 
-           (method-of.n (k (come.v (to.p-arg (the.d (wrong.a conclusion.n))) 
+((k Logic.n)
+ ((pres be.v)
+  (= (a.d (systematic.a
+           (method-of.n (k (come.v (to.p-arg (the.d (wrong.a conclusion.n)))
                                     (adv-a (with.p (k confidence.n)))))))))))
 ((now.adv-s ((pres can.aux-s) you.pro (tell.v me.pro (whether (it.pro ((pres be.v) ((adv-a actually.a) true.a) (that (|Mr. Rochester| ((pres perf) (ask.v you.pro (to (marry.v him.pro)))))))))))) ?)
 (AND.ADV-S

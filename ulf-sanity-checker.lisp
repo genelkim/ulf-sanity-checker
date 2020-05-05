@@ -47,6 +47,39 @@
 
 (in-package :ulf-sanity-checker)
 
+;; Preprocess raw signal before any checking.
+;; Stuff that will break the type checker.
+;;  - Remove repeated coordination:
+;;    e.g. (you.pro and.cc me.pro and.cc him.pro)
+;;         -> (you.pro me.pro and.cc him.pro)
+(defun raw-preprocess (rawf)
+  (labels
+    (
+     ; Single-level remove repeated coordination.
+     (single-level-remove-repeat-coord (f)
+       (let* ((oddvals (loop for x in f
+                             for i from 0
+                             if (oddp i)
+                             collect x))
+              (oddset (remove-duplicates oddvals)))
+        (if (and (oddp (length f))
+                 (= 1 (length oddset))
+                 (lex-coord? (first oddset)))
+          (let ((evenvals (loop for x in f
+                                for i from 0
+                                if (evenp i)
+                                collect x)))
+            (util:insert (first oddset) evenvals (1- (length evenvals))))
+          ; Just return the input if not relevant.
+          f)))
+     ; Remove repeated coordination.
+     (remove-repeat-coord (f)
+       (cond
+         ((atom f) f)
+         (t (let ((recres (mapcar #'remove-repeat-coord f)))
+              (single-level-remove-repeat-coord recres))))))
+  (remove-repeat-coord rawf)))
+
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
 ;; Apply sub macros
@@ -140,7 +173,8 @@
 
 ;; Main sanity checking function.
 (defun sanity-check (f &key (silent? nil))
-  (let* ((rawpatternres
+  (let* ((f (raw-preprocess f))
+         (rawpatternres
              (bad-pattern-check
                (util:hide-ttt-ops f)
                *raw-bad-pattern-test-pairs*))

@@ -106,3 +106,18 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test coordinated-nps
+  "UNKNOWN type in coordinated NP."
+  (:tag :bugfix :np-coord)
+  (let ((ulfs
+          '(
+            ((a.d (|Web|.n site.n))
+             ((pres may.aux-s)
+              (be.v created.a
+                    (adv-a (in.p ((an.d intranet.n) or.cc
+                                  (a.d ((local.a or.cc private.a) cloud.n)) or.cc
+                                  (a.d ((virtual.a private.a) network.n))))))))
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

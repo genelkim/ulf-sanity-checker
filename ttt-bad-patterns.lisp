@@ -264,7 +264,9 @@
      (((! verb? tensed-verb?) _*1 (! term? p-arg? pred?) _*2) _*3 (! term? p-arg? pred?) _*4)
      ~  
      ((+ verb?) lex-coord? (+ verb?))
-     ((+ tensed-verb?) lex-coord? (+ tensed-verb?))))
+     ((+ tensed-verb?) lex-coord? (+ tensed-verb?))
+     (((+ verb?) lex-coord? (+ verb?)) _+5)
+     (((+ tensed-verb?) lex-coord? (+ tensed-verb?)) _+6)))
 (defparameter *bad-verb-args-msg*
   "Verbs (both tensed and untensed) *must* take all non-subject arguments in a flat construction.")
 

@@ -27,6 +27,8 @@
 							(|Andrea| ((PAST SAY.V) *H (ADV-A (TO.P (HIS.D GROOM.N))))))
 						(SUB (ADV-A (HAVE.V (A.D (SLIGHT.A HEADACHE.N))))
 								 (I.PRO ((PAST GO.V) (TO.P-ARG (K BED.N)) EARLY.ADV-E *H)))
+            ((SUB DOWN.ADV-A ((THE.D CEILING.N) ((PAST COME.V) *H))) AND.CC
+             ((THE.D DOG.N) ((PAST GO.V) AWAY.ADV-A)))
             )))
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))

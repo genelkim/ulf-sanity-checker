@@ -110,6 +110,9 @@
          (t (mapcar #'remove-extra-parens f))))
      ); end of labels definitions.
 
+    (when (not (listp f))
+      (return-from preprocess (list f nil nil)))
+
     ;; Main body, run the preprocessing functions.
     (let* ((subf (nth-value 1 (ulf:apply-sub-macro f :calling-package :ulf-sanity-checker)))
            (repf (nth-value 1 (ulf:apply-rep-macro subf :calling-package :ulf-sanity-checker)))
@@ -122,7 +125,16 @@
            (vocs (second voc-pair))
            (paren-remvd-main-sent (remove-extra-parens main-sent))
            (uninv (ulf:uninvert-verbauxes paren-remvd-main-sent))
-           (regrouped (list uninv sent-ops vocs)))
+           recres regrouped)
+      (setf recres (mapcar #'preprocess (util:intern-symbols-recursive sent-ops *package*)))
+      (setf sent-ops (append (mapcar #'first recres)
+                             (apply #'append (mapcar #'second recres))))
+      (setf vocs (apply #'append (mapcar #'third recres)))
+      (setf recres (mapcar #'preprocess (util:intern-symbols-recursive vocs *package*)))
+      (setf sent-ops (apply #'append (mapcar #'second recres)))
+      (setf vocs (append (mapcar #'first recres)
+                         (apply #'append (mapcar #'third recres))))
+      (setf regrouped (list uninv sent-ops vocs))
       ;(format t "subf: ~s~%~%" subf)
       ;(format t "sent-op-pair ~s~%~%" sent-op-pair)
       ;(format t "voc-pair ~s~%~%" voc-pair)

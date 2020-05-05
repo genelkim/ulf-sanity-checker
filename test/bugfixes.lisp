@@ -207,3 +207,41 @@
                    (N+PREDS SYMBOL.N (OF.P (THE.D (HUMAN.N FRATERNITY.N))))))))))))))
 	(assert-equal nil (sanity-check ulf :silent? t) ulf)))
 
+(define-test paren-failure
+  "Type checking failure on parentheses."
+  (:tag :bugfix :paren)
+  (let ((ulfs
+          '(
+((SHE.PRO
+  ((PAST BE.V)
+   ((HASTY.A BUT.CC GOOD-HUMOURED.A)
+    (VAIN.A
+     (|(|
+      ((SHE.PRO ((PAST CAN.AUX-V) NOT (HELP.V IT.PRO)))
+       (WHEN.PS
+        ((EVERY.D (N+PREDS GLANCE.N (IN.P (THE-GEN.D GLASS.N))))
+         ((PAST SHOW.V) HER.PRO
+          (= (SUCH.D (= (A.D (FLUSH-OF.N (K LOVELINESS.N))))))))))
+      |)|)
+     BUT.CC (NOT AFFECTED.A))
+    LIBERAL-HANDED.A
+    (INNOCENT.A (OF.P-ARG (THE.D (N+PREDS PRIDE.N (OF.P (K WEALTH.N))))))
+    INGENUOUS.A (SUFFICIENTLY.MOD-A INTELLIGENT.A) GAY.A LIVELY.A AND.CC
+    UNTHINKING.A)))
+ ((SHE.PRO
+   ((PAST BE.V)
+    ((VERY.MOD-A CHARMING.A) IN_SHORT.ADV-S
+     (EVEN.ADV-S
+      (TO.P-ARG
+       (NP+PREDS
+        (A.D
+         (N+PREDS (COOL.A (OBSERVER-OF.N *REF)) (OF.P (HER.D (OWN.A SEX.N)))))
+        (LIKE.P ME.PRO)))))))
+  BUT.CC
+  (SHE.PRO
+   ((PAST BE.V) NOT
+    ((PROFOUNDLY.MOD-A INTERESTING.A) OR.CC (THOROUGHLY.MOD-A IMPRESSIVE.A))))))
+              )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

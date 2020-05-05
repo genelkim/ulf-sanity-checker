@@ -172,8 +172,8 @@
 
 
 ;; Main sanity checking function.
-(defun sanity-check (f &key (silent? nil))
-  (let* ((f (raw-preprocess f))
+(defun sanity-check (in-f &key (silent? nil))
+  (let* ((f (raw-preprocess in-f))
          (rawpatternres
              (bad-pattern-check
                (util:hide-ttt-ops f)
@@ -199,7 +199,7 @@
     (when (not silent?)
       (format t linesep) ; DO NOT DELETE OR COMMENT (used for filtering system messages)
       (format t "## Sanity checking formula (before preprocessing).~%")
-      (format t "```~%~s~%```~%~%" f)
+      (format t "```~%~s~%```~%~%" in-f)
 
       (format t "## Sanity checking formula (after preprocessing).~%")
       (format t "```~%~s~%```~%~%" preprocd)

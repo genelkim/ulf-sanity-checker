@@ -255,3 +255,20 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test named-predicates-as-term
+  "Named predicates get analyzed as terms."
+  (:tag :bugfix :named-predicate)
+  (let ((ulfs
+          '(
+            ((THE.D RAIL-LINE.N)
+              ((PAST (PASV CARRY.V)) (ADV-A (UNDER.P (THE.D |Tsugaru Strait.N|)))
+                                     (ADV-A (TO.P |Hokkaido|))))
+            (((THE.D |Milky Way.N|)
+                ((PRES BE.V)
+                    (= (A.D (VAST.A (BELT.N (OF.P-ARG (DISTANT.A (K (PLUR STAR.N))))))))))
+              ((EACH.D STAR.N)
+                 ((PRES BE.V) (= (A.D (N+PREDS SUN.N (LIKE.P (OUR.D ONE.N))))))))
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

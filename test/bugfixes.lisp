@@ -272,3 +272,34 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test voc-unknown
+  "Vocatives result in UNKNOWN types."
+  (:tag :bugfix :voc)
+  (let ((ulfs
+          '(
+						(|"|
+						 ((VOC
+						   (MY.D
+						    (((VERY.MOD-A GOOD.A) (FRIEND-OF.N *S)) AND.CC
+						     (EXCELLENT.A (NEIGHBOR-OF.N *S)))))
+						  (QT-ATTR
+						   ((THE.D COUNT.N) ((PAST REPLY.V) *QT (ADV-A (WITH.P (A.D SMILE.N))))))
+						  YOU.PRO
+						  (REALLY.ADV-A ((PRES EXAGGERATE.V) (MY.D (TRIFLING.A (PLUR EXERTION.N))))))
+						 |"|)
+						(|"| (YES.YN (VOC (YOUR.D EXCELLENCY.N))) |"|)
+						(|"| ((I.PRO ((PRES HAVE.V) (THAT.D HONOR.N))) (VOC (YOUR.D EXCELLENCY.N))) |"|)
+						((I.PRO ((PRES PERF) JUST.ADV-S (COMMIT.V (A.D WRONG.N)))) (VOC |sir|))
+						(((BUT.ADV-S
+               (ADV-S (FOR.P (TO (COME.V (ADV-A (TO.P (THE.D (POINT-OF.N *REF))))))))
+						   (SUB (ADV-A (BY-MEANS-OF.P (NP+PREDS WHICH.PRO (= (THE.D DEUCE.N)))))
+						        ((PAST DO.AUX-S) YOU.PRO
+						         (MANAGE.V (TO (GET.V (IN.P-ARG HERE.PRO))) *H))))
+						  (VOC (NP+PREDS YOU.PRO (= |Father Madeleine|))))
+             ?)
+						(|"| ((voc |Father Fauchelevent|)
+						      (I.pro ((past save.v) (your.d life.n)))) |"|)
+          )))
+  (loop for ulf in ulfs
+        do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

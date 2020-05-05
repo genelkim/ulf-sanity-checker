@@ -172,7 +172,7 @@
      (!2 adj? noun? term?)
      (!3 adj? noun? term?)
      (!4 adj? noun? term?)
-     _*2))
+     (*2 ~ lex-coord?)))
 (defparameter *bad-flat-mod-msg*
   "Predicate modifications should be scoped into operator-operand pairs.")
 

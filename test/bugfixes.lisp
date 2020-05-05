@@ -145,3 +145,16 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test coordinated-adjective
+  "UNKNOWN type in coordinated adjective phrase."
+  (:tag :bugfix :adj-coord)
+  (let ((ulfs
+          '(
+            (I.PRO
+             ((PAST BE.V) HOWEVER.ADV-S
+              (GOOD.A CLEVER.A COMPOSED.A AND.CC FIRM.A)
+              (ADV-A (LIKE.P HIM.PRO))))
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

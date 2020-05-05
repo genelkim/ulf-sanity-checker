@@ -245,3 +245,13 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test interjection-unknown
+  "Interjections don't seem to be handled in the sanity checker type system."
+  (:tag :bugfix :interjection-unknown)
+  (let ((ulfs
+          '(
+            (SUB (|"| (AH.X (GOOD.X GOD.X)) |"|) (|Fauchelevent| ((PAST CRY.V) *H)))
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

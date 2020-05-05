@@ -127,3 +127,21 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test coordinated-tensed-sents
+  "UKNOWN type in coordinated tensed sentences."
+  (:tag :bugfix :tensed-sents)
+  (let ((ulfs
+          '(
+						(GRADUALLY.ADV-E
+						 (((MY.D MIND.N) ((PAST COME.V) BACK.ADV-A AGAIN.ADV-S))
+						  ((MY.D (PLUR PULSE.N))
+						   ((PAST QUIET.V) DOWN.ADV-A
+						    (ADV-A (TO.P (A.D ((MORE.MOD-A NATURAL.A) TIME.N))))))
+						  AND.CC
+						  (I.PRO
+						   ((PAST BE.V) ONCE_MORE.ADV-S
+						    (IN.P (K (POSSESSION.N (OF.P-ARG MYSELF.PRO))))))))
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

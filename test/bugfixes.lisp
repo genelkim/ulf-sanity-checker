@@ -64,6 +64,18 @@
                                                  (to (meet.v
                                                        (((the.d (|Gramm-Rudman| ((balanced.a budget.n) law.n))) 's)
                                                         (|1990| (n+preds (deficit.n target.n) (of.p (ds currency "$100 billion")))))))))))))))
+						(|"|
+						 (|"|
+						  ((You.pro ((pres know.v) (ans-to (sub (at-loc.p which.rel) (I.pro ((pres live.v) *h))))))
+						   (I.pro ((pres expect.v) you.pro ({at-time}.p (k (n+preds (tomorrow.pro morning.n)
+                                                                        (at.p (ds date-time "nine o'clock"))))))))
+						  |"|)
+						|"|)
+						((Well.x
+						 (you.pro ((past give.v) him.pro
+						           (the.d (n+preds (= (ds currency "two hundred francs"))
+						                           (sub tht.rel
+						                                (I.pro ((past perf) (leave.v *h (adv-a (for.p him.pro))))))))))) ?)
             )))
 		(loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
@@ -300,6 +312,9 @@
 						   ((PRES LET.V) ME.PRO
 						    (KNOW.V (ANS-TO (SUB WHAT.PRO (YOU.PRO ((PRES WANT.V) *H)))))))
 						  !))
+						(I.PRO
+						 ((PAST FEEL.V) (MY.D HEART.N) POUND.V
+						  (ADV-E (AFTER.P (KA (RUN.V A_LITTLE.ADV-A))))))
             )))
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
@@ -360,7 +375,7 @@
 (define-test possible-ps-issue
   "Possible issue with ps."
   (:tag :bugfix :ps)
-  (let ((ulf '(It.pro ((pres perf) 
+  (let ((ulf '(It.pro ((pres perf)
                        (be.v
                          (= (ten.d (plur year.n)))
                          (since.ps (we.pro (last.adv-e (past meet.v)))))))))
@@ -378,6 +393,14 @@
 						               (SUB (AT-LOC.P WHICH.REL)
 						                    ((YOUR.D (FATHER-OF.N *S)) (PRES WORK.V) (ADV-E *H)))))))
 						           ?)
+						(((PRES PERF) YOU.PRO
+						  (VISIT.V
+						   (THE.D
+						    (N+PREDS TOWN.N
+						     (SUB (AT-LOC.P WHICH.REL)
+						          ((YOUR.D (FATHER-OF.N *S))
+						           ((PAST PERF) BEAR.V (ADV-E *H))))))))
+						 ?)
             )))
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))

@@ -331,6 +331,31 @@
     ((PAST DISAPPEAR.V) (ADV-A (WITH.P HER.PRO))
      (ADV-A
       (IN.P (THE.D (N+PREDS WHIRL.N (OF.P (K (PLUR DANCER.N))))))))))))
+((IT.PRO
+  ((PRES BE.V) (A.D (MELANCHOLY.A OBJECT.N))
+   (ADV-A
+    (TO.P
+     (NP+PREDS THOSE.PRO
+      (WHO.REL
+       (((PRES WALK.V) (ADV-E (THROUGH.P (THIS.D (GREAT.A TOWN.N)))))
+        OR.CC ((PRES TRAVEL.V) (IN.P (THE.D COUNTRY.N))))))))))
+ (WHEN.PS
+  (THEY.PRO
+   ((PRES SEE.V)
+    ((THE.D (PLUR STREET.N)) (THE.D (PLUR ROAD.N)) AND.CC
+     (K (PLUR CABBIN-DOOR.N)))
+    (CROWDED.A
+     (MOD-A
+      (WITH.P
+       ((K
+         (N+PREDS (PLUR BEGGAR.N) (OF.P (THE.D (FEMALE.A SEX.N)))
+          (((PASV FOLLOW.V)
+            (BY.P-ARG
+             (NP+PREDS ((THREE.D FOUR.D OR.CC SIX.D) (PLUR CHILD.N))
+              (ALL.MOD-A (IN.P (K (PLUR RAG.N)))))))
+           AND.CC
+           (IMPORTUNE.V (EVERY.D PASSENGER.N)
+            (ADV-A (FOR.P (AN.D ALMS.N)))))))))))))))
  )))
     (loop for ulf in ulfs
           do (multiple-value-bind

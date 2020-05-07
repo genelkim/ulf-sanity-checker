@@ -94,7 +94,11 @@
       (aux? (! ~ verb?))
       (tensed-aux? _! _+)
       (tensed-aux? (! ~ verb?))
-      (_+ tensed-aux? _*)))
+      (_+ tensed-aux? _*)
+      ; Allow inverted auxiliaries.
+      ~
+      ((! aux? tensed-aux?) term? verb? _*)
+      ))
 (defparameter *bad-aux-msg*
   "auxiliaries take a single untensed verb argument.")
 
@@ -320,6 +324,15 @@
 (defparameter *old-adj-mod-msg*
   "adv-a is no longer the modifier for adjectives.  Please use mod-a.")
 
+;; Not technically wrong, but the current annotation guidelines canonicalize
+;; with flat coordination.
+(defparameter *ttt-not-flat-coord*
+  '(!1 (_+ (lex-coord? _!))
+       ((and.cc _!) _+)))
+(defparameter *not-flat-coord-msg*
+  "WARNING: The current guidelines assume flat usage of coordination.")
+
+
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt::match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt::match-expr *ttt-bad-prep* x))
@@ -365,6 +378,7 @@
 (defun bad-voc? (x) (ttt::match-expr *ttt-bad-voc* x))
 (defun bad-sent-term? (x) (ttt::match-expr *ttt-bad-sent-term* x))
 (defun old-adj-mod? (x) (ttt:match-expr *ttt-old-adj-mod* x))
+(defun not-flat-coord? (x) (ttt:match-expr *ttt-not-flat-coord* x))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -402,6 +416,7 @@
     (list #'bad-sent-term? *bad-sent-term-msg*)
     (list #'bad-adv-a-arg? *bad-adv-a-arg-msg*)
     (list #'old-adj-mod? *old-adj-mod-msg*)
+    (list #'not-flat-coord? *not-flat-coord-msg*)
     ))
 
 ;; Same as above but run on raw formulas (before preprocessing).

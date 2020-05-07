@@ -34,7 +34,7 @@
   '(!1 ((!2 tensed-sent-reifier? lex-ps?) _! _+)
       ((!3 tensed-sent-reifier? lex-ps?) (! ~ tensed-sent?))))
 (defparameter *bad-tensed-sent-op-msg*
-  "that/tht/whether/ans-to take a single tensed sentence argument.")
+  "that/tht/whether/ans-to/*.ps take a single tensed sentence argument.")
 
 (defparameter *ttt-bad-sent-op*
   '(!1 (sent-reifier? _! _+)

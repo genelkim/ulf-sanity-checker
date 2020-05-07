@@ -81,3 +81,31 @@
                      nil
                      (sanity-check badulf :silent? t) badulf)))
 
+(define-test long-issue-sent3
+  "Long sentence with a few issues."
+  (:tag :bugfix :long-sent)
+  (let ((ulf
+          '((HE.PRO
+  ((PAST PERF)
+   (PITCH.V (AS.PS (I.PRO ((PRES PERF) (SAY.V REF.PRO))))
+    (ADV-A
+     (AGAINST.P
+      (NP+PREDS (THE.D (PLUR BULWARK.N))
+       (SUB (ON.P WHICH.REL)
+            (HE.PRO
+             ((PAST LIE.V) *H
+              (LIKE.A
+               (SOME.D
+                (N+PREDS (HORRIBLE.A (UNGAINLY.A (SORT-OF.N (K PUPPET.N))))
+                 ((LIFE-SIZE.A INDEED.ADV-S)
+                  (BUT.PS
+                   (SUB
+                    (HOW-EM.MOD-A
+                     (DIFFERENT.A
+                      (FROM.P-ARG
+                       ((((K LIFE.N) 'S) COLOUR.N) OR.CC
+                        (((K LIFE.N) 'S) COMELINESS.N)))))
+                    (IT.PRO ((PRES BE.V) *H)))))))))))))))))
+ !)))
+    (assert-equal nil (sanity-check ulf :silent? t) ulf)))
+

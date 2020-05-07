@@ -264,3 +264,74 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
+(define-test inverted-verbs
+  "Issues with inverted verb constructions."
+  (:tag :bugfix :inverted-verb)
+  (let ((ulfs
+          '(
+            ; System confuses the predicative verb as an inverted sentence.
+            ((YOU.PRO
+              ((PRES LET.V) US.PRO
+               (RETURN.V
+                (TO.P-ARG
+                 (THE.D
+                  (N+PREDS EXPLANATION.N
+                   (SUB WHICH.REL
+                        (YOU.PRO ((PRES PERF) (ASK.V *H (OF.P-ARG ME.PRO)))))))))))
+             !)
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+
+(define-test it-cleft-issues
+  "it-clefts just causes a whole lot of problems."
+  (:tag :bugfix :it-cleft)
+  (let ((ulfs
+          '(
+((SUB WHAT.PRO ((PAST BE.V) IT-CLEFT.PRO (= *H)
+  (THAT.REL
+   ((PRES DETERMINE.V)
+    (THE.D
+     (N+PREDS ROUTE.N (SUB THT.REL ((A.D RAILROAD.N) ((PRES TAKE.V) *H)))))))))
+ ?)
+            ))
+        (badulfs
+          '(
+; it-cleft requires the parenthetical to appear after the "be"-phrase.
+((REP (SUB (NP+PREDS WHAT.PRO *P) ((PAST BE.V) IT-CLEFT.PRO (= *H)))
+  (THAT.REL
+   ((PRES DETERMINE.V)
+    (THE.D
+     (N+PREDS ROUTE.N (SUB THT.REL ((A.D RAILROAD.N) ((PRES TAKE.V) *H))))))))
+ ?)
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))
+    (loop for ulf in badulfs
+          do (assert-equality #'(lambda (x y) (not (equal x y)))
+                              nil
+                              (sanity-check ulf :silent? t) ulf))))
+
+(define-test it-extra-issues
+  "it-extra.pro causes a lot of problems."
+  (:tag :bugfix :it-extra)
+  (let ((ulfs
+          '(
+            (IT-EXTRA.PRO (((PRES BE.V) (HOW.MOD-A THOUGHTLESS.A))
+                           (KE (YOU.PRO (DO.V THAT.PRO)))))
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+
+(define-test inverted-be
+  "Inverted be.v raising errors."
+  (:tag :bugfix :inverted-be)
+  (let ((ulfs
+          '(
+            (((PRES BE.V) YOU.PRO (CONCERNED.A (WITH.P-ARG (K (PLUR POLITIC.N)))))
+             ?)
+            (((pres be.v) you.pro (sure.a (of.p-arg (your.d (plur fact.n)))))?)
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+

@@ -255,7 +255,7 @@
      (_+ (((* adv-a?) (aux? verb?) (* adv-a?)) term?))
      ~
      (it-cleft.pro ((! verb? tensed-verb?) relativized-sent?))
-     (it-extra.pro ((! verb? tensed-verb?) ((!7 that ke to ka) _+8)))))
+     (it-extra.pro ((! verb? tensed-verb?) ((!7 that tht ke to ka) _+8)))))
 (defparameter *bad-aux-before-arg-msg*
   "The auxiliary should be applied after all non-subject arguments. You can IGNORE this message if this is occurring within it-extra.pro.")
 
@@ -275,7 +275,7 @@
      (_+ (((+ verb?) lex-coord? (+ verb?)) _+5))
      (_+ (((+ tensed-verb?) lex-coord? (+ tensed-verb?)) _+6))
      (it-cleft.pro ((! verb? tensed-verb?) relativized-sent?))
-     (it-extra.pro ((! verb? tensed-verb?) ((!7 that ke to ka) _+8)))))
+     (it-extra.pro ((! verb? tensed-verb?) ((!7 that tht ke to ka) _+8)))))
 (defparameter *bad-verb-args-msg*
   "Verbs (both tensed and untensed) *must* take all non-subject arguments in a flat construction.")
 

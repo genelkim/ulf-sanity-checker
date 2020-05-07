@@ -254,12 +254,28 @@
   (loop for ulf in ulfs
         do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
-(define-test inverted-perf
+(define-test inverted-perfprog
   "False positives with inverted perf constructions."
   (:tag :bugfix :inverted-perf)
   (let ((ulfs
           '(
             (((pres perf) you.pro not (learn.v (to (respect.v (plur other.n))))) ?)
+(((PRES PERF) YOU.PRO
+  (HAVE.V
+   (ANY.D
+    (N+PREDS EXPERIENCE.N (WITH.P (THIS.D (KIND-OF.N (K WORK.N))))))))
+ ?)
+(((PRES PERF) NOT YOU.PRO (GOT.V (ANY.D MONEY.N))) ?)
+
+            (((PRES PROG) YOU.PRO
+                          (REF.V (ADV-A ((IN.P (K JEST.N)) OR.CC (IN.P (K EARNEST.N))))))
+             ?)
+            (((PRES PROG) YOU.PRO (WRITE.V (A.D LETTER.N))) ?)
+            ((SUB (ADV-E (AT.P (WHAT.D TIME.N)))
+                        ((PRES PROG) YOU.PRO (GO.V (ADV-A (ON.P (K DUTY.N))) *H)))
+              ?)
+            ((SUB WHAT.PRO ((PRES PROG) YOU.PRO (LOOK.V (ADV-A (FOR.P *H))))) ?)
+            ((SUB WHAT.PRO ((PRES PROG) YOU.PRO (LOOK.V (ADV-A (AT.P *H))))) ?)
             )))
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
@@ -279,6 +295,11 @@
                    (SUB WHICH.REL
                         (YOU.PRO ((PRES PERF) (ASK.V *H (OF.P-ARG ME.PRO)))))))))))
              !)
+						(PLEASE.ADV-S
+						 ((YOU.PRO
+						   ((PRES LET.V) ME.PRO
+						    (KNOW.V (ANS-TO (SUB WHAT.PRO (YOU.PRO ((PRES WANT.V) *H)))))))
+						  !))
             )))
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
@@ -330,7 +351,33 @@
           '(
             (((PRES BE.V) YOU.PRO (CONCERNED.A (WITH.P-ARG (K (PLUR POLITIC.N)))))
              ?)
-            (((pres be.v) you.pro (sure.a (of.p-arg (your.d (plur fact.n)))))?)
+            (((pres be.v) you.pro (sure.a (of.p-arg (your.d (plur fact.n))))) ?)
+						(((PRES BE.V) NOT YOU.PRO HAPPY.A) ?)
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+
+(define-test possible-ps-issue
+  "Possible issue with ps."
+  (:tag :bugfix :ps)
+  (let ((ulf '(It.pro ((pres perf) 
+                       (be.v
+                         (= (ten.d (plur year.n)))
+                         (since.ps (we.pro (last.adv-e (past meet.v)))))))))
+    (assert-equal nil (sanity-check ulf :silent? t) ulf)))
+
+(define-test rel-in-sent-mod
+	"Relativized sentence is not recognized when the relativizer is within a sentence modifying operator."
+  (:tag :bugfix :rel-in-sent-mod :rel :sent-mod)
+  (let ((ulfs
+          '(
+						(((PRES PERF) YOU.PRO EVER.ADV-S
+						            (VISIT.V
+						             (THE.D
+						              (N+PREDS OFFICE.N
+						               (SUB (AT-LOC.P WHICH.REL)
+						                    ((YOUR.D (FATHER-OF.N *S)) (PRES WORK.V) (ADV-E *H)))))))
+						           ?)
             )))
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))

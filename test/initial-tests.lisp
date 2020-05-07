@@ -36,7 +36,7 @@
                           (of.p-arg (your.d (goal.n (mod-n (in.p (k life.n))))))))))))
             (((past make.v) he.pro (a.d table.n)) ?)
             (you.pro ((pres be.v) (way.mod-a (off.p (the.d track.n)))))
-            ((Who.pro ((past be.v) (= (the.d (1st.a (| U.S. President|.n)))))) ?)
+            ((Who.pro ((past be.v) (= (the.d (1st.a | U.S. President|.n))))) ?)
             ; flattened args
             (I.pro ((past deliver.v) (the.d artifact.n)
                                      carefully.adv-a
@@ -86,9 +86,6 @@
             ((voc (np+preds you.pro rascal.n))
              (sub (at.p (what.d place.n)) ((pres perf) you.pro (be.v *h)))
              (voc |John|) ?)
-            ((voc (n+preds you.pro rascal.n))
-             (sub (at.p (what.d place.n)) ((pres perf) you.pro (be.v *h)))
-             (voc |John|.n) ?)
             (YOU.PRO
               ((PRES SHOULD.AUX-V)
                ((ASK.V (YOUR.D (FATHER-OF.N *S)) (ADV-A (FOR.P (HIS.D ADVICE.N))))
@@ -152,6 +149,9 @@
             (I.pro ((pres will.aux-v) (go.v there.adv-e)))
             ; Name splitting
             ((Who.pro ((past be.v) (= (the.d (1st.a (| U.S.| |President|.n)))))) ?)
+            ((voc (n+preds you.pro rascal.n))
+             (sub (at.p (what.d place.n)) ((pres perf) you.pro (be.v *h)))
+             (voc |John|.n) ?)
             )))
     (loop for ulf in ulfs
           do (assert-true (not (equal

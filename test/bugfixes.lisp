@@ -158,55 +158,6 @@
     (loop for ulf in ulfs
           do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 
-(define-test long-issue-sent1
-  "Long sentence with multiple strange issues."
-  (:tag :bugfix :long-sent)
-  (let ((ulf
-          '((((THE.D (PLUR TREE.N))
-              ((PAST PERF)
-               (BEND.V OVER.ADV-A (ADV-A (TOWARDS.P (THE.D (PLUR NETTLE.N)))))))
-             ((THE.D PLANT.N) ((PAST PERF) (SPRING.V UPWARD.ADV-A)))
-             ((THE.D BRANCH.N) ((PAST PERF) INCLINE.V))
-             ((NP+PREDS THAT.PRO
-               (WHICH.REL ((PRES CRAWL.V) (ADV-E (ON.P (THE.D EARTH.N))))))
-              ((PAST PERF)
-               (GO.V
-                (ADV-A
-                 (IN.P
-                  (K
-                   (N+PREDS SEARCH.N
-                    (OF.P
-                     (NP+PREDS THAT.PRO
-                      (WHICH.REL
-                       ((PRES EXPAND.V) (ADV-E (IN.P (THE-GEN.D AIR.N))))))))))))))
-             ((NP+PREDS THAT.PRO
-               (WHICH.REL ((PRES FLOAT.V) (ADV-E (ON.P (THE-GEN.D WIND.N))))))
-              ((PAST PERF)
-               (BEND.V OVER.ADV-A
-                (ADV-A
-                 (TOWARDS.P
-                  (NP+PREDS THAT.PRO
-                   (WHICH.REL ((PRES TRAIL.V) (ADV-E (IN.P (THE-GEN.D MOSS.N)))))))))))
-             (((K (PLUR TRUNK.N)) (K (PLUR BOUGH.N)) (K (PLUR LEAF.N)) (K (PLUR FIBRE.N))
-               (K (PLUR CLUSTER.N)) (K (PLUR TENDRIL.N)) (K (PLUR SHOOT.N))
-               (K (PLUR SPINE.N)) AND.CC (K (PLUR THORN.N)))
-              ((PAST PERF)
-               ((MINGLE.V CROSS.V MARRY.V AND.CC CONFOUND.V) THEMSELVES.PRO
-                (ADV-A (IN.P EACH_OTHER.PRO))))))
-            ((K (N+PREDS VEGETATION.N (IN.P (A.D ((DEEP.A AND.CC CLOSE.A) EMBRACE.N)))))
-             ((PAST PERF)
-              ((CELEBRATE.V AND.CC ACCOMPLISH.V) THERE.ADV-E
-               (ADV-E
-                (UNDER.P
-                 (THE.D (WELL-PLEASED.A (N+PREDS EYE.N (OF.P (THE.D |Creator.N|)))))))
-               (ADV-E
-                (IN.P
-                 (THAT.D
-                  (N+PREDS ENCLOSURE.N (((THREE.A HUNDRED.N) (PLUR FOOT.N)) SQUARE.N)
-                   (= (THE.D (HOLY.A (N+PREDS MYSTERY.N (OF.P (K FRATERNITY.N))))))
-                   (N+PREDS SYMBOL.N (OF.P (THE.D (HUMAN.N FRATERNITY.N))))))))))))))
-	(assert-equal nil (sanity-check ulf :silent? t) ulf)))
-
 (define-test paren-failure
   "Type checking failure on parentheses."
   (:tag :bugfix :paren)
@@ -302,4 +253,14 @@
           )))
   (loop for ulf in ulfs
         do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
+
+(define-test inverted-perf
+  "False positives with inverted perf constructions."
+  (:tag :bugfix :inverted-perf)
+  (let ((ulfs
+          '(
+            (((pres perf) you.pro not (learn.v (to (respect.v (plur other.n))))) ?)
+            )))
+    (loop for ulf in ulfs
+          do (assert-equal nil (sanity-check ulf :silent? t) ulf))))
 

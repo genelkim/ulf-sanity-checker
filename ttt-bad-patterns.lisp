@@ -34,7 +34,7 @@
   '(!1 ((!2 tensed-sent-reifier? lex-ps?) _! _+)
       ((!3 tensed-sent-reifier? lex-ps?) (! ~ tensed-sent?))))
 (defparameter *bad-tensed-sent-op-msg*
-  "that/tht/whether/ans-to take a single tensed sentence argument.")
+  "that/tht/whether/ans-to/*.ps take a single tensed sentence argument.")
 
 (defparameter *ttt-bad-sent-op*
   '(!1 (sent-reifier? _! _+)
@@ -94,7 +94,11 @@
       (aux? (! ~ verb?))
       (tensed-aux? _! _+)
       (tensed-aux? (! ~ verb?))
-      (_+ tensed-aux? _*)))
+      (_+ tensed-aux? _*)
+      ; Allow inverted auxiliaries.
+      ~
+      ((! aux? tensed-aux?) term? verb? _*)
+      ))
 (defparameter *bad-aux-msg*
   "auxiliaries take a single untensed verb argument.")
 
@@ -168,11 +172,11 @@
   "The 'pu' operator takes a single phrase.")
 
 (defparameter *ttt-bad-flat-mod*
-  '((*1 ~ verb?)
+  '((*1 ~ verb? lex-macro?)
      (!2 adj? noun? term?)
      (!3 adj? noun? term?)
      (!4 adj? noun? term?)
-     _*2))
+     (*2 ~ lex-coord?)))
 (defparameter *bad-flat-mod-msg*
   "Predicate modifications should be scoped into operator-operand pairs.")
 
@@ -246,9 +250,12 @@
 
 (defparameter *ttt-bad-aux-before-arg*
   '(!1
-     ((aux? verb?) (* adv-a?) term?)
-     ((tensed-aux? verb?) (* adv-a?) term?)
-     (((* adv-a?) (aux? verb?) (* adv-a?)) term?)))
+     (_+ ((aux? verb?) (* adv-a?) term?))
+     (_+ ((tensed-aux? verb?) (* adv-a?) term?))
+     (_+ (((* adv-a?) (aux? verb?) (* adv-a?)) term?))
+     ~
+     (it-cleft.pro ((! verb? tensed-verb?) relativized-sent?))
+     (it-extra.pro ((! verb? tensed-verb?) ((!7 that tht ke to ka) _+8)))))
 (defparameter *bad-aux-before-arg-msg*
   "The auxiliary should be applied after all non-subject arguments. You can IGNORE this message if this is occurring within it-extra.pro.")
 
@@ -261,10 +268,14 @@
 
 (defparameter *ttt-bad-verb-args*
   '(!1
-     (((! verb? tensed-verb?) _*1 (! term? p-arg? pred?) _*2) _*3 (! term? p-arg? pred?) _*4)
+     (_+ (((! verb? tensed-verb?) _*1 (! term? p-arg? pred?) _*2) _*3 (! term? p-arg? pred?) _*4))
      ~  
-     ((+ verb?) lex-coord? (+ verb?))
-     ((+ tensed-verb?) lex-coord? (+ tensed-verb?))))
+     (_+ ((+ verb?) lex-coord? (+ verb?)))
+     (_+ ((+ tensed-verb?) lex-coord? (+ tensed-verb?)))
+     (_+ (((+ verb?) lex-coord? (+ verb?)) _+5))
+     (_+ (((+ tensed-verb?) lex-coord? (+ tensed-verb?)) _+6))
+     (it-cleft.pro ((! verb? tensed-verb?) relativized-sent?))
+     (it-extra.pro ((! verb? tensed-verb?) ((!7 that tht ke to ka) _+8)))))
 (defparameter *bad-verb-args-msg*
   "Verbs (both tensed and untensed) *must* take all non-subject arguments in a flat construction.")
 
@@ -318,6 +329,20 @@
 (defparameter *old-adj-mod-msg*
   "adv-a is no longer the modifier for adjectives.  Please use mod-a.")
 
+(defparameter *ttt-bad-it-cleft*
+  '(!1 (it-cleft.pro ((lex-tense? be.v) _!))))
+(defparameter *bad-it-cleft-msg*
+  "it-cleft.pro requires an additional non-flat sentence argument to be.v with a relativizer.")
+
+;; Not technically wrong, but the current annotation guidelines canonicalize
+;; with flat coordination.
+(defparameter *ttt-not-flat-coord*
+  '(!1 (_+ (lex-coord? _!))
+       ((and.cc _!) _+)))
+(defparameter *not-flat-coord-msg*
+  "WARNING: The current guidelines assume flat usage of coordination.")
+
+
 ;; Function definitions for this.
 (defun bad-det? (x) (ttt::match-expr *ttt-bad-det* x))
 (defun bad-prep? (x) (ttt::match-expr *ttt-bad-prep* x))
@@ -363,6 +388,8 @@
 (defun bad-voc? (x) (ttt::match-expr *ttt-bad-voc* x))
 (defun bad-sent-term? (x) (ttt::match-expr *ttt-bad-sent-term* x))
 (defun old-adj-mod? (x) (ttt:match-expr *ttt-old-adj-mod* x))
+(defun not-flat-coord? (x) (ttt:match-expr *ttt-not-flat-coord* x))
+(defun bad-it-cleft? (x) (ttt:match-expr *ttt-bad-it-cleft* x))
 
 (defparameter *bad-pattern-test-pairs*
   (list
@@ -400,6 +427,8 @@
     (list #'bad-sent-term? *bad-sent-term-msg*)
     (list #'bad-adv-a-arg? *bad-adv-a-arg-msg*)
     (list #'old-adj-mod? *old-adj-mod-msg*)
+    (list #'not-flat-coord? *not-flat-coord-msg*)
+    (list #'bad-it-cleft? *bad-it-cleft-msg*)
     ))
 
 ;; Same as above but run on raw formulas (before preprocessing).

@@ -47,6 +47,39 @@
 
 (in-package :ulf-sanity-checker)
 
+;; Preprocess raw signal before any checking.
+;; Stuff that will break the type checker.
+;;  - Remove repeated coordination:
+;;    e.g. (you.pro and.cc me.pro and.cc him.pro)
+;;         -> (you.pro me.pro and.cc him.pro)
+(defun raw-preprocess (rawf)
+  (labels
+    (
+     ; Single-level remove repeated coordination.
+     (single-level-remove-repeat-coord (f)
+       (let* ((oddvals (loop for x in f
+                             for i from 0
+                             if (oddp i)
+                             collect x))
+              (oddset (remove-duplicates oddvals)))
+        (if (and (oddp (length f))
+                 (= 1 (length oddset))
+                 (lex-coord? (first oddset)))
+          (let ((evenvals (loop for x in f
+                                for i from 0
+                                if (evenp i)
+                                collect x)))
+            (util:insert (first oddset) evenvals (1- (length evenvals))))
+          ; Just return the input if not relevant.
+          f)))
+     ; Remove repeated coordination.
+     (remove-repeat-coord (f)
+       (cond
+         ((atom f) f)
+         (t (let ((recres (mapcar #'remove-repeat-coord f)))
+              (single-level-remove-repeat-coord recres))))))
+  (remove-repeat-coord rawf)))
+
 ;; Extract sentence-level operators that are phrasal in surface form:
 ;;  not, adv-e, adv-s, adv-f
 ;; Apply sub macros
@@ -77,6 +110,9 @@
          (t (mapcar #'remove-extra-parens f))))
      ); end of labels definitions.
 
+    (when (not (listp f))
+      (return-from preprocess (list f nil nil)))
+
     ;; Main body, run the preprocessing functions.
     (let* ((subf (nth-value 1 (ulf:apply-sub-macro f :calling-package :ulf-sanity-checker)))
            (repf (nth-value 1 (ulf:apply-rep-macro subf :calling-package :ulf-sanity-checker)))
@@ -89,7 +125,30 @@
            (vocs (second voc-pair))
            (paren-remvd-main-sent (remove-extra-parens main-sent))
            (uninv (ulf:uninvert-verbauxes paren-remvd-main-sent))
-           (regrouped (list uninv sent-ops vocs)))
+           so-recres voc-recres regrouped)
+      (setf so-recres
+            (mapcar #'(lambda (so)
+                        (if (atom so) (list so nil nil)
+                          (let ((recres (mapcar #'preprocess so)))
+                            (list (mapcar #'first recres)
+                                  (apply #'append (mapcar #'second recres))
+                                  (apply #'append (mapcar #'third recres))))))
+                    (util:intern-symbols-recursive sent-ops *package*)))
+      (setf voc-recres
+            (mapcar #'(lambda (voc)
+                        (if (atom voc) (list voc nil nil)
+                          (let ((recres (mapcar #'preprocess voc)))
+                            (list (mapcar #'first recres)
+                                  (apply #'append (mapcar #'second recres))
+                                  (apply #'append (mapcar #'third recres))))))
+                    (util:intern-symbols-recursive vocs *package*)))
+      (setf sent-ops (append (mapcar #'first so-recres)
+                             (apply #'append (mapcar #'second so-recres))
+                             (apply #'append (mapcar #'second voc-recres))))
+      (setf vocs (append (mapcar #'first voc-recres)
+                         (apply #'append (mapcar #'third voc-recres))
+                         (apply #'append (mapcar #'third so-recres))))
+      (setf regrouped (list uninv sent-ops vocs))
       ;(format t "subf: ~s~%~%" subf)
       ;(format t "sent-op-pair ~s~%~%" sent-op-pair)
       ;(format t "voc-pair ~s~%~%" voc-pair)
@@ -139,8 +198,9 @@
 
 
 ;; Main sanity checking function.
-(defun sanity-check (f &key (silent? nil))
-  (let* ((rawpatternres
+(defun sanity-check (in-f &key (silent? nil))
+  (let* ((f (raw-preprocess in-f))
+         (rawpatternres
              (bad-pattern-check
                (util:hide-ttt-ops f)
                *raw-bad-pattern-test-pairs*))
@@ -165,7 +225,7 @@
     (when (not silent?)
       (format t linesep) ; DO NOT DELETE OR COMMENT (used for filtering system messages)
       (format t "## Sanity checking formula (before preprocessing).~%")
-      (format t "```~%~s~%```~%~%" f)
+      (format t "```~%~s~%```~%~%" in-f)
 
       (format t "## Sanity checking formula (after preprocessing).~%")
       (format t "```~%~s~%```~%~%" preprocd)

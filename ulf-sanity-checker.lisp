@@ -202,7 +202,7 @@
   (let* ((f (raw-preprocess in-f))
          (rawpatternres
              (bad-pattern-check
-               (util:hide-ttt-ops f)
+               (hide-ttt-ops f)
                *raw-bad-pattern-test-pairs*))
          (preprocd (util:intern-symbols-recursive (preprocess f) *package*))
          (ppfm (first preprocd)) ; preprocessed formula

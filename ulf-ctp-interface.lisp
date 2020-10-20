@@ -107,7 +107,7 @@
   given formula for the purposes of filtering parsing results.
   "
   (let (preprocd)
-    (when (check-for-single-bad-pattern (util:hide-ttt-ops f)
+    (when (check-for-single-bad-pattern (hide-ttt-ops f)
                                         *ulfctp-raw-bad-pattern-tests*)
       (return-from exists-bad-pattern? t))
     (setf preprocd (util:intern-symbols-recursive (preprocess f) *package*))

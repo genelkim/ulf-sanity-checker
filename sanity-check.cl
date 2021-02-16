@@ -11,7 +11,7 @@
 
 ;; For some reason the AWS lisp isn't loading Quicklisp automatically in this
 ;; script.
-(load "/home/webapp/quicklisp/setup")
+(load "/home/apache/quicklisp/setup.lisp")
 ;(load "~/quicklisp/setup")
 ;(ql:quickload :util :silent t)
 ;(ql:quickload :ulf-lib :silent t)
@@ -29,9 +29,12 @@
 (let* ((use-stdin nil)
        (fh (if use-stdin *standard-output*
                      (open (nth 1 (util:argv))))))
-  
+
   (when fh
     (loop for ulf = (read fh nil)
-          while ulf do (format t "~s~%~%####################################~%~%" (sanity-check ulf)))
+          while ulf do
+          (progn
+            (sanity-check ulf)
+          (format t "~%~%####################################~%~%")))
     (close fh)))
 
